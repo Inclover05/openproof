@@ -1,0 +1,23 @@
+{
+  "probeId": "blocked-v3",
+  "source": "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.0.2/definitely-missing-openproof.txt",
+  "txId": "0x5e6461ed7344b445a09e3d6a08a32259ee2e9e24ba44907607fb109f38e6273a",
+  "submittedAt": "2026-09-26T17:22:25.067Z",
+  "status": "ACCEPTED",
+  "execution": "FINISHED_WITH_RETURN",
+  "votes": [
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE"
+  ],
+  "validators": [
+    "0x9F6aa7364D20CF25F054Ea83f3CB950317fD34b6",
+    "0xF01877B6Ac60861CA3b134e0E483C482679b4682",
+    "0x77a07271abB443F55be19c357AA35206BeB63E1d",
+    "0xa856ae1b278F030082c66Fa50A5F51F485D1F940",
+    "0x96298d411a2D622945BEACa6112374583b501d52"
+  ],
+  "result": "{\"base_chain\": \"0x2105\", \"ethereum_chain\": \"0x1\", \"source_access\": \"blocked\"}"
+}

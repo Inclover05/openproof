@@ -1,0 +1,23 @@
+{
+  "probeId": "github",
+  "source": "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.0.2/contracts/access/Ownable.sol",
+  "txId": "0xb04280298b09448ad83b6612970f567c45218d7595b644147fe18198986d6d55",
+  "submittedAt": "2026-09-26T10:25:12.034Z",
+  "status": "ACCEPTED",
+  "execution": "FINISHED_WITH_RETURN",
+  "votes": [
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE"
+  ],
+  "validators": [
+    "0x58a7b7ac6Cb01843e4e5af117C551E59449E0F49",
+    "0x77a07271abB443F55be19c357AA35206BeB63E1d",
+    "0xb4Fb7ADc6877a6A16bd131c7c9270834bD3DEf34",
+    "0xB7551beF37a05995218f9a1BB7A93e5B6705f535",
+    "0x4FC292d5D255Ec8Ad4cdcd36c5E188dfEE9D160e"
+  ],
+  "result": "{\"base_chain\": \"0x2105\", \"ethereum_chain\": \"0x1\", \"source_access\": \"unavailable\"}"
+}

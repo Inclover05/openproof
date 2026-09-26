@@ -1,0 +1,23 @@
+{
+  "probeId": "docs-v3",
+  "source": "https://docs.genlayer.com/developers/networks",
+  "txId": "0xa9b852f1d3140449f6d9945a6f3b6aa1ec33c3dfcd3fcc4e0ba4e74897073cf5",
+  "submittedAt": "2026-09-26T17:22:17.757Z",
+  "status": "ACCEPTED",
+  "execution": "FINISHED_WITH_RETURN",
+  "votes": [
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE"
+  ],
+  "validators": [
+    "0xE8fdefdfe18fD8E5B0d576b7CcfC5a29CE43fD7f",
+    "0x27276953fa2052A5178Ae5a3D114a3DFB9A2fC98",
+    "0x58a7b7ac6Cb01843e4e5af117C551E59449E0F49",
+    "0xB7551beF37a05995218f9a1BB7A93e5B6705f535",
+    "0xF01877B6Ac60861CA3b134e0E483C482679b4682"
+  ],
+  "result": "{\"base_chain\": \"0x2105\", \"ethereum_chain\": \"0x1\", \"source_access\": \"readable\"}"
+}

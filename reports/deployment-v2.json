@@ -1,0 +1,13 @@
+{
+  "network": "testnet-bradbury",
+  "chainId": 4221,
+  "sdk": "1.1.8",
+  "deployer": "0xc0CECa4Dd4c72018a506ef6AD20724Df2C36C9A8",
+  "balanceBefore": "7998511862181328100",
+  "submittedAt": "2026-09-26T10:26:29.725Z",
+  "status": "FINALIZED",
+  "execution": "FINISHED_WITH_RETURN",
+  "balanceAfter": "7997079719659581800",
+  "txId": "0x2a08e880dfdcdfd785b1dc45fd8b6af302973f9d795ccdfb7488a87c5339c2a0",
+  "contract": "0xA46F5daA5663682eBe19A9261d1d891Bab0F83aE"
+}

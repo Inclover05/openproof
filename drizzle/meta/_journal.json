@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1790417606945,
+      "tag": "0000_robust_stepford_cuckoos",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1790443599575,
+      "tag": "0001_cloudy_master_chief",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1790445500937,
+      "tag": "0002_verified_testnet_case",
+      "breakpoints": true
+    }
+  ]
+}

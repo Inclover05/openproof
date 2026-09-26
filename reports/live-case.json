@@ -1,0 +1,73 @@
+{
+  "record": {
+    "id": "1b9b6bcf-4a34-4e60-bd91-b025f8134c07",
+    "input": {
+      "claim": "Test fixture: this unrelated source does not establish a promise that this contract owner is the zero address.",
+      "type": "control",
+      "chain": "1",
+      "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+      "source": "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.0.2/contracts/access/Ownable.sol",
+      "cutoff": "2026-09-01T00:00:00Z",
+      "field": "owner()",
+      "expected": "0x0000000000000000000000000000000000000000"
+    },
+    "evidence": [
+      {
+        "id": "source-1",
+        "kind": "source",
+        "title": "Public promise",
+        "url": "https://raw.githubusercontent.com/OpenZeppelin/openzeppelin-contracts/v5.0.2/contracts/access/Ownable.sol",
+        "retrievedAt": "2026-09-26T17:51:57.151Z",
+        "status": "readable",
+        "detail": "Readable at collection time. This URL is mutable; a captured hash does not prove past publication or future validator access.",
+        "hash": "38578bd71c0a909840e67202db527cc6b4e6b437e0f39f0c909da32c1e30cb81",
+        "excerpt": "// SPDX-License-Identifier: MIT // OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol) pragma solidity ^0.8.20; import {Context} from \"../utils/Context.sol\"; /** * @dev Contract module which provides a basic access control mechanism, where * there is an account (an owner) that can be granted exclusive access to * specific functions. * * The initial owner is set to the address provided by the deployer. This can * later be changed with {transferOwnership}. * * This module is used through inheritance. It will make available the modifier * `onlyOwner`, which can be applied to your functions to restrict their use to * the owner. */ abstract contract Ownable is Context { address private _owner; /** * @dev The caller account is not authorized to perform an operation. */ error OwnableUnauthorizedAccount(address account); /** * @dev The owner is not a valid owner account. (eg. `address(0)`) */ error OwnableInvalidOwner(address owner); event OwnershipTransferred(address indexed previousOwner, address indexed newOwner); /** * @dev Initializes the contract setting the address provided by the deployer as the initial owner. */ constructor(address initialOwner) { if (initialOwner == address(0)) { revert OwnableInvalidOwner(address(0)); } _transferOwnership(initialOwner); } /** * @dev Throws if called by any account other than the owner. */ modifier onlyOwner() { _checkOwner(); _"
+      },
+      {
+        "id": "chain-1",
+        "kind": "chain",
+        "title": "Contract state at cutoff",
+        "url": "https://etherscan.io/address/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "chainId": 1,
+        "address": "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+        "retrievedAt": "2026-09-26T17:51:57.151Z",
+        "status": "unavailable",
+        "detail": "The chain provider returned HTTP 403 for eth_getCode.",
+        "block": 25878704,
+        "blockHash": "0x1d63bf12e101c849b9e8bceca81a71d801735fca65ff9f1f12284e9d77c20547",
+        "timestamp": "2026-08-31T23:59:59.000Z"
+      }
+    ],
+    "createdAt": "2026-09-26T17:52:03.044Z",
+    "state": "finalized",
+    "txId": "0x83c828ab3977acdddf1be2b6309f3264cdd5670c40e27a2ed0feb66901c2882e",
+    "contract": "0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe",
+    "execution": "FINISHED_WITH_RETURN",
+    "outcome": "Insufficient evidence",
+    "explanation": "The source did not establish the exact dated promise under this rubric.",
+    "reasonCode": "SOURCE_NOT_SUFFICIENT",
+    "decisiveRefs": [],
+    "evaluatedAt": "2026-09-26T17:52:32Z"
+  },
+  "quote": {
+    "gas": "1296141",
+    "gasPrice": "132163500",
+    "estimatedGen": "0.0001713025310535",
+    "quotedAt": "2026-09-26T17:52:32.287Z",
+    "network": "Bradbury",
+    "chainId": 4221
+  },
+  "balanceBefore": "7994526036265789100",
+  "txId": "0x83c828ab3977acdddf1be2b6309f3264cdd5670c40e27a2ed0feb66901c2882e",
+  "status": "FINALIZED",
+  "execution": "FINISHED_WITH_RETURN",
+  "votes": [
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE"
+  ],
+  "balanceAfter": "7994362563761293100",
+  "balanceDelta": "163472504496000"
+}
