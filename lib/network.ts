@@ -5,31 +5,12 @@ import {
   type TransactionHash,
 } from "genlayer-js/types";
 import { lifecycle, type CaseRecord } from "./domain";
-export const CONTRACT = "0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe" as const;
+import {contractFor, payload, LEGACY_CONTRACT} from "./protocol";
+export {payload, contractFor} from "./protocol";
+export const CONTRACT = LEGACY_CONTRACT;
 export const DEPLOY_TX =
   "0xae4862375dcdad10086d8c163a33b8e399e9e112713fa850fbf235beaf6d6f90";
 export const client = createClient({ chain: testnetBradbury });
-export function payload(record: CaseRecord) {
-  const source = record.evidence.find((e) => e.kind === "source"),
-    chain = record.evidence.find((e) => e.kind === "chain");
-  if (!source?.hash || chain?.block === undefined)
-    throw new Error(
-      "A readable source and anchored historical block are required.",
-    );
-  return JSON.stringify({
-    case_id: record.id,
-    claim_type: record.input.type,
-    chain_id: Number(record.input.chain),
-    claim: record.input.claim,
-    address: record.input.address,
-    source: record.input.source,
-    source_hash: source.hash,
-    cutoff: Math.floor(Date.parse(record.input.cutoff) / 1000),
-    block: chain.block,
-    field: record.input.field,
-    expected: record.input.expected,
-  });
-}
 export async function refresh(record: CaseRecord) {
   if (!record.txId) return record;
   const tx = await client.getTransaction({
@@ -42,7 +23,7 @@ export async function refresh(record: CaseRecord) {
   const updated: CaseRecord = {
     ...record,
     state,
-    contract: CONTRACT,
+    contract: contractFor(record),
     execution: tx.txExecutionResultName,
     outcome: undefined,
     explanation: undefined,
@@ -51,7 +32,7 @@ export async function refresh(record: CaseRecord) {
   };
   if (["appeal window", "finalized"].includes(state)) {
     const raw = await client.readContract({
-      address: CONTRACT,
+      address: contractFor(record),
       functionName: "get_case",
       args: [record.id],
       transactionHashVariant:

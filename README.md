@@ -1,68 +1,44 @@
 # OpenProof
 
-An evidence workspace for bounded, dated smart-contract promises. Explore without a wallet; collect a public source and a historical chain observation; review and save the exact evidence; optionally submit to a GenLayer Intelligent Contract. The contract independently retrieves evidence and owns the decision. The web server never computes a final verdict.
+OpenProof checks a dated public promise against independent public evidence and historical smart-contract state. It also offers a separate contract-state mode for an exact historical field comparison without claiming anyone made a promise.
 
-## Implemented
+## What you can check
 
-- Responsive scope, evidence, review and persistent case pages.
-- Ethereum (1) and Base (8453); verified cutoff block and next-block boundary.
-- Three narrow rubrics: `owner()` equality, `unlockTime()` lower bound, EIP-1967 implementation-slot equality. These do not establish broader control or continuous treasury restrictions.
-- Source allowlist, redirect rejection, 500 KB retrieval limit, hashes and explicit missing-evidence states.
-- D1 persistence, immutable reviewed snapshots, idempotent saving and per-IP request limits.
-- Live Bradbury gas quote, injected-wallet signing, exact-payload transaction verification, recovery by transaction ID, execution-aware results and protocol appeal availability/bond display.
-- Clearly labelled illustrative cases and one real unrelated-source test, assessed by five validators.
-- Feature-detected `start_case` WebMCP tool with validation and lifecycle cleanup.
+- **Admin and owner control**: compare `owner()` with an expected address.
+- **Treasury restrictions**: compare `unlockTime()` with a minimum Unix timestamp.
+- **Contract changes**: compare the EIP-1967 implementation slot with an expected address.
 
-## Intelligent Contract
+Ethereum and Base are supported. The cutoff maps to a finalized block; current state never substitutes for missing history. The result is **Supported**, **Contradicted**, or **Insufficient evidence**, only after successful GenLayer contract execution.
 
-Network: **GenLayer Bradbury, chain 4221**. SDK: **genlayer-js 1.1.8**, pinned.
+## Public sources
 
-Contract: `0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe`
+Direct public X post URLs use the official X embed endpoint and normalized text. Public Medium articles require a readable article body. Blocked, paywalled, private, deleted, or unrelated sources do not become evidence of a broken promise. Add a separately attributed corroborating source while retaining the original URL. Images, videos, whole threads, identity, and legal or beneficial ownership are outside scope.
 
-[Deployment transaction](https://explorer-bradbury.genlayer.com/transactions/0xae4862375dcdad10086d8c163a33b8e399e9e112713fa850fbf235beaf6d6f90)
+## Stack
 
-[Live judgment transaction](https://explorer-bradbury.genlayer.com/transactions/0x83c828ab3977acdddf1be2b6309f3264cdd5670c40e27a2ed0feb66901c2882e)
+Next.js 16, React 19, TypeScript, shadcn/ui, Neon Postgres on Vercel, GenLayerJS 1.1.8, and a Python Intelligent Contract on Bradbury. The website stores evidence previews and immutable case inputs. Validators retrieve evidence and own the verdict. Wallets sign directly; the web server holds no signing key.
 
-Demonstration case: `/case/1b9b6bcf-4a34-4e60-bd91-b025f8134c07`. Its database seed contains the actual public result and transaction. Refresh checks the network again.
+## Run locally
 
-## Development
+Use Node 22.13 or newer. Install with `npm ci`. Link the correct Vercel project and run `vercel env pull .env.local` to obtain `DATABASE_URL`. Then run `npm run db:migrate` and `npm run dev`. Do not commit environment files or signing keys.
 
-Node 22.13+ is required. This app adapts the Sites Vinext/Cloudflare starter to GenLayer; it is not a clone of GenLayer's Vue boilerplate.
+- `npm test`: JavaScript regression tests.
+- `npm run lint`: lint checks.
+- `npm run build`: production build and type validation.
+- `scripts/verify-api.mjs`: real API and database acceptance checks; set `OPENPROOF_TEST_URL` to the test deployment.
+- `tests/test_contract.py` and `tests/test_contract_v2.py`: direct GenLayer SDK fixture tests; require the compatible `genlayer-test` toolchain.
+- `scripts/live-suite.mjs`: labelled live Bradbury acceptance tests. These spend test GEN and use an ignored local test key; they are not part of the web runtime.
 
-```sh
-npm ci
-node scripts/run-framework.mjs build
-npm run dev
-node --test tests/core.mjs
-node node_modules/typescript/bin/tsc --noEmit
-```
+## Deployment and contracts
 
-If the Windows npm shim is misconfigured, invoke `node "C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js"` instead of `npm`.
+Vercel project: `inclover05s-projects/openproof`. Source repository: https://github.com/Inclover05/openproof (private).
 
-Apply each migration in `drizzle/` once to a fresh local D1 database before using persistence:
+Current v2 contract: `0xB74B3339695C50C6d16168708e2B22A7D6D72EAB` on Bradbury, chain 4221. Legacy v1 records retain `0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe` and their exact original payloads. See `reports/deployment-social-v2.json` and `reports/live-suite-v2.json` for live execution details.
 
-```sh
-node --import ./scripts/sites-env.mjs ./node_modules/wrangler/bin/wrangler.js d1 execute DB --local --config dist/server/wrangler.json --persist-to .wrangler/state --file drizzle/0000_robust_stepford_cuckoos.sql
-```
+The original private Sites deployment is preserved at https://openproof-evidence.inclover05.chatgpt.site. Private user-created cases remain there; only explicitly labelled public test records are seeded into the new Vercel database. Earlier D1 migrations and feasibility reports are retained as history.
 
-Repeat with migrations 0001 and 0002. Sites applies packaged migrations during publication. Do not replay schema migrations against an already migrated database.
+## Demo and verification
 
-Python fixtures use `genlayer-test==0.29.2`, `genvm-linter==0.11.0`, `cloudpickle==3.1.2`, pytest and the explicit `v0.2.14` GenVM SDK artifact. Run `pytest tests/test_contract.py -q`. The local `.python-tools` folder is ignored. See the verification report for the direct-runner limitation.
+Read `DEMO_GUIDE.md` for a walkthrough, internet-derived test inputs, expected results, observed results, and limitations. The homepage includes an interactive explanation and links to real network-assessed cases. Fictional sample cases are clearly labelled.
 
-## Secrets and source
-
-No signing key or external API secret is required by the hosted app. The funded test deployment key is local in ignored `.secrets/testnet-key`; it is not in source, browser bundles or the deployment archive. Do not use it for assets with real value. `scripts/network.mjs` and `scripts/verify-live.mjs` are explicit local test utilities.
-
-Authenticated Sites repository: `https://git.chatgpt-team.site/0afa4953-32d1-4d26-9760-b41377cafee4/appgprj_6ab7970b1b94819180ddda5c7c71ec8a.git`
-
-## Current limits
-
-Public RPCs can reject historical state reads. In the September 1 Ethereum check, cutoff mapping succeeded but `eth_getCode` returned HTTP 403. The app preserves that failure and never substitutes current state. Deep historical coverage needs independently accessible archive endpoints and further validation.
-
-The live judgment proves the insufficient-evidence path. Supported and contradicted outcomes for all three templates are tested with controlled fixtures, not three independent real promises. The direct runner's sandbox replay is incompatible with this SDK; live five-validator agreement is recorded separately.
-
-Wallet signing on the published domain, wallet reputation warnings, live appeals, refunds and induced consensus disagreement remain unverified. Do not bypass a wallet warning. Gas and appeal-bond quotes are not guaranteed total charges.
-
-The Site starts owner-private. Case links do not grant stranger access until the owner explicitly changes the audience. A public multi-user launch needs additional abuse, moderation and retention controls.
-
-See [verification report](reports/verification.md) and [reviewer guide](REVIEWER_GUIDE.md).
+Public sharing is read-only; case IDs are unlisted identifiers, not authentication. Do not store private information. The free providers and testnet can rate-limit or change. A supported bounded comparison is not a security audit, proof of identity, investment recommendation, or legal finding.

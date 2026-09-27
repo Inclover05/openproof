@@ -1,0 +1,23 @@
+{
+  "probeId": "x-social-v2",
+  "source": "https://x.com/GenLayer/status/2041643224536592387",
+  "txId": "0x9c5f33023ba0d1061175c7fc7712203e18faa67fa9b5ef7d995054d2b2ae3137",
+  "submittedAt": "2026-09-27T08:51:48.710Z",
+  "status": "ACCEPTED",
+  "execution": "FINISHED_WITH_RETURN",
+  "votes": [
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE",
+    "AGREE"
+  ],
+  "validators": [
+    "0x7c23E70217AB2A9E777940Eb769bA4198d1BaA61",
+    "0x27276953fa2052A5178Ae5a3D114a3DFB9A2fC98",
+    "0xE8fdefdfe18fD8E5B0d576b7CcfC5a29CE43fD7f",
+    "0x4FC292d5D255Ec8Ad4cdcd36c5E188dfEE9D160e",
+    "0x3B940A5b4A762583453D9e9Cf0981BE0426A8e79"
+  ],
+  "result": "{\"content_hash\": \"02aa9c4bf592f3d2f1eafea6c44217fcda821484266ec737a20db1028eb2059d\", \"source_access\": \"readable\"}"
+}

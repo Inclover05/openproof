@@ -7,6 +7,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { readyForSubmission } from "@/lib/protocol";
 import type { CaseRecord } from "@/lib/domain";
 type Provider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
@@ -159,7 +160,7 @@ export default function NetworkActions({
         throw new Error(
           "The selected account or network changed. Reconnect before signing.",
         );
-      const [{ createClient }, { testnetBradbury }, { CONTRACT, payload }] =
+      const [{ createClient }, { testnetBradbury }, { contractFor, payload }] =
         await Promise.all([
           import("genlayer-js"),
           import("genlayer-js/chains"),
@@ -173,7 +174,7 @@ export default function NetworkActions({
         >["provider"],
       });
       const txId = await client.writeContract({
-        address: CONTRACT,
+        address: contractFor(record),
         functionName: "evaluate",
         args: [payload(record)],
         value: BigInt(0),
@@ -198,9 +199,7 @@ export default function NetworkActions({
       setBusy(false);
     }
   }
-  const ready =
-    record.evidence.some((e) => e.hash) &&
-    record.evidence.some((e) => e.block !== undefined);
+  const ready = readyForSubmission(record);
   return (
     <div className="network-actions">
       {record.txId ? (
@@ -256,7 +255,7 @@ export default function NetworkActions({
           <p className="network-disclaimer">
             {ready
               ? "A wallet is needed only to submit. Your wallet shows the final fee. If it displays a security warning, stop."
-              : "A readable source and a verified cutoff block are needed before submission."}
+              : "A verified cutoff block is required. Public promise mode also needs a readable source."}
           </p>
           <details className="recover">
             <summary>Already submitted?</summary>

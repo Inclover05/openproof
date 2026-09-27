@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import CaseBuilder from "./case-builder";
+import ProjectGuide from "./project-guide";
 import type { ClaimType } from "@/lib/domain";
 import {
   ArrowUpRight,
@@ -108,9 +109,9 @@ export default function OpenProof() {
             Workspace
           </Link>
           <a href="#examples">Explore cases</a>
-          <button onClick={() => setMethod(true)}>
+          <a href="#how-it-works">
             How it works <ArrowUpRight size={14} />
-          </button>
+          </a>
         </nav>
         <span className="network-label">
           <span />
@@ -159,8 +160,7 @@ export default function OpenProof() {
               </button>
             </div>
             <div className="composer-note">
-              <ShieldCheck size={15} /> Start with a public, dated promise.
-              We’ll help narrow the question.
+              <ShieldCheck size={15} /> Check a public promise or an exact historical value.
             </div>
           </div>
           <aside className="scope-card">
@@ -294,9 +294,10 @@ export default function OpenProof() {
           </div>
         </section>
         <section className="live-proof" aria-label="Live testnet verification">
-          <div><span className="eyebrow">LIVE ON BRADBURY</span><h2>See an independently assessed case.</h2><p>A deliberately unrelated source returned insufficient evidence, with five validator votes in agreement.</p></div>
-          <Link className="secondary" href="/case/1b9b6bcf-4a34-4e60-bd91-b025f8134c07">Inspect the live test <ArrowUpRight size={16}/></Link>
+          <div><span className="eyebrow">REAL TESTNET CASES</span><h2>Three outcomes. Inspect the evidence.</h2><p>Historical Base observations and an unrelated public X post, independently assessed on Bradbury. These are labelled tests, not allegations about a project.</p></div>
+          <div className="live-links"><Link className="secondary" href="/case/2735f336-d5cf-417c-a267-8f0918455293">Matching owner <ArrowUpRight size={16}/></Link><Link className="secondary" href="/case/d7ca8a0d-92cd-4d16-b68d-9ba999205c4d">Different owner <ArrowUpRight size={16}/></Link><Link className="secondary" href="/case/72f7f19d-e0b1-488f-9ace-a06567b0c37b">Unrelated X source <ArrowUpRight size={16}/></Link></div>
         </section>
+        <ProjectGuide onStart={() => setScope(true)} />
         <footer>
           <span className="footer-brand">
             <FileCheck2 size={18} /> OpenProof{" "}

@@ -104,3 +104,30 @@ body {
 
 
 
+
+.verification-choice {border:1px solid var(--border,#d8ded8);padding:16px;border-radius:10px;display:grid;gap:12px;}
+.verification-choice legend {font-size:13px;font-weight:600;padding:0 6px;}
+.verification-choice label {display:flex;align-items:flex-start;gap:10px;cursor:pointer;}
+.verification-choice input {width:16px;height:16px;margin-top:3px;accent-color:#315d46;}
+.verification-choice span {display:grid;gap:3px;font-size:14px;}
+.verification-choice small {font-weight:400;line-height:1.5;color:#637166;}
+
+.project-guide {margin-top:64px;scroll-margin-top:30px;}
+.guide-grid {display:grid;grid-template-columns:1fr 1fr;border:1px solid #d8ded8;border-radius:12px;overflow:hidden;}
+.guide-story,.guide-simulator {padding:32px;}
+.guide-story h3,.guide-simulator h3 {font-size:24px;line-height:1.3;margin:10px 0 16px;}
+.guide-story p,.guide-story li,.guide-simulator p,.guide-faq p {font-size:15px;line-height:1.75;color:#4d5d53;}
+.guide-story p+p {margin-top:12px;}
+.guide-story ol {padding-left:21px;margin:22px 0;display:grid;gap:12px;list-style:decimal;}
+.guide-simulator {background:#edf2eb;}
+.scenario-options {display:flex;flex-wrap:wrap;gap:7px;margin:20px 0;}
+.scenario-options button {border:1px solid #aabdaf;border-radius:100px;padding:8px 12px;font-size:12px;background:#fafbf8;cursor:pointer;}
+.scenario-options button.selected {background:#244f3a;color:white;border-color:#244f3a;}
+.scenario-result {min-height:270px;padding-top:15px;color:#244f3a;}
+.guide-limit {border-top:1px solid #c6d4c6;margin-top:22px;padding-top:18px;}
+.guide-faq {margin:22px 0 0;display:grid;gap:1px;}
+.guide-faq details {border-bottom:1px solid #d8ded8;padding:18px 0;}
+.guide-faq summary {font-weight:600;cursor:pointer;font-size:15px;}
+.guide-faq p {max-width:850px;margin-top:12px;}
+@media(max-width:760px){.guide-grid{grid-template-columns:1fr}.guide-story,.guide-simulator{padding:23px}.project-guide{margin-top:40px}}
+.live-links{display:flex;flex-direction:column;gap:10px;flex-shrink:0}.case-tools{flex-wrap:wrap}

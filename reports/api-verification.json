@@ -1,0 +1,55 @@
+{
+  "root": "http://127.0.0.1:3000",
+  "checkedAt": "2026-09-27T09:00:39.397Z",
+  "caseId": "933337e8-fe6d-47de-9f77-ca4983de457e",
+  "checks": [
+    {
+      "name": "Legacy finalized case survives database migration",
+      "result": "PASS"
+    },
+    {
+      "name": "Cross-origin mutations rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "Unknown chain rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "Future cutoff rejected",
+      "result": "PASS"
+    },
+    {
+      "name": "Public X post is readable through attributed endpoint",
+      "result": "PASS"
+    },
+    {
+      "name": "Private-network source blocked without fetch",
+      "result": "PASS"
+    },
+    {
+      "name": "Historical state collected without a promise source",
+      "result": "PASS"
+    },
+    {
+      "name": "Changed input cannot reuse the evidence snapshot",
+      "result": "PASS"
+    },
+    {
+      "name": "Save creates a durable draft without a verdict",
+      "result": "PASS"
+    },
+    {
+      "name": "Save is idempotent and reload preserves exact record",
+      "result": "PASS"
+    },
+    {
+      "name": "Invalid transaction cannot attach to a case",
+      "result": "PASS"
+    },
+    {
+      "name": "Live fee quote works for source-free state mode",
+      "result": "PASS"
+    }
+  ]
+}

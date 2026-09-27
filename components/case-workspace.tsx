@@ -15,6 +15,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EvidenceCard } from "./evidence-card";
 import NetworkActions from "./network-actions";
+import CaseBuilder from "./case-builder";
 import { sampleCase } from "@/lib/samples";
 import { question, templates, type CaseRecord } from "@/lib/domain";
 
@@ -22,6 +23,7 @@ export default function CaseWorkspace({ id }: { id: string }) {
   const [record, setRecord] = useState<CaseRecord | null>(() => sampleCase(id)),
     [error, setError] = useState(""),
     [copied, setCopied] = useState(false);
+  const [correcting, setCorrecting] = useState(false);
   useEffect(() => {
     if (sampleCase(id)) return;
     const abort = new AbortController();
@@ -118,6 +120,7 @@ export default function CaseWorkspace({ id }: { id: string }) {
                 </h1>
               </div>
               <div className="case-tools">
+                {!record.sample ? <button className="secondary" onClick={() => setCorrecting(true)}>Create revised case</button> : null}
                 <button onClick={share} className="secondary">
                   <Copy size={15} />
                   {copied ? "Link copied" : "Copy link"}
@@ -135,7 +138,7 @@ export default function CaseWorkspace({ id }: { id: string }) {
               <div className="case-primary">
                 <section className="claim-summary">
                   <div className="section-kicker">
-                    <span>THE PUBLIC PROMISE</span>
+                    <span>{record.input.verification === "state" ? "THE CONTRACT STATE ASSERTION" : "THE PUBLIC PROMISE"}</span>
                     <span className="badge neutral">
                       {record.sample ? "Sample" : "User-supplied claim"}
                     </span>
@@ -235,6 +238,8 @@ export default function CaseWorkspace({ id }: { id: string }) {
                   </TabsContent>
                   <TabsContent value="scope">
                     <div className="scope-explanation">
+                      <h3>{record.input.verification === "state" ? "Historical contract state" : "Public promise verification"}</h3>
+                      <p>{record.input.verification === "state" ? "This case compares a single contract value with the expected value. It does not claim a team made or fulfilled a promise. Any source links are contextual." : "An accessible source must establish the exact dated promise before contract state can support or contradict it. Corroborating sources are separately attributed."}</p>
                       <h3>One field. One point in time.</h3>
                       <p>{templates[record.input.type].hint}</p>
                       <p>
@@ -399,6 +404,7 @@ export default function CaseWorkspace({ id }: { id: string }) {
                 </section>
               </aside>
             </div>
+            {correcting ? <CaseBuilder open={correcting} onOpenChange={setCorrecting} initialType={record.input.type} initialClaim={record.input.claim} initialInput={record.input} /> : null}
             <footer>
               <span className="footer-brand">
                 <FileCheck2 size={18} />

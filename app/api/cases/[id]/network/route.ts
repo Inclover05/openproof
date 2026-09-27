@@ -1,5 +1,5 @@
 import { database, failure, limit, readBody } from "@/lib/server";
-import { CONTRACT, client, payload, refresh } from "@/lib/network";
+import { contractFor, client, payload, refresh } from "@/lib/network";
 import type { CaseRecord } from "@/lib/domain";
 import type { TransactionHash } from "genlayer-js/types";
 export async function POST(
@@ -32,7 +32,7 @@ export async function POST(
       });
       if (
         (tx.recipient || tx.to_address || "").toLowerCase() !==
-        CONTRACT.toLowerCase()
+        contractFor(record).toLowerCase()
       )
         throw new Error("This transaction targets a different contract.");
       const decoded = tx.txDataDecoded as
@@ -45,7 +45,7 @@ export async function POST(
       record = {
         ...record,
         txId: body.txId,
-        contract: CONTRACT,
+        contract: contractFor(record),
         state: "queued",
       };
       // Save the identifier before polling. A timeout must never cause resubmission.

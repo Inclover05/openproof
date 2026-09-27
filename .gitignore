@@ -54,3 +54,5 @@ reports/*receipt-raw*
 __pycache__/
 *.tsbuildinfo
 .test-build/
+.vercel
+.env*

@@ -5,7 +5,8 @@ import {readFileSync,writeFileSync,existsSync} from 'node:fs';
 const account=privateKeyToAccount(readFileSync('.secrets/testnet-key','utf8').trim());
 const client=createClient({chain:testnetBradbury,account});
 const mode=process.argv[2];
-const path='reports/deployment.json';
+const v2=process.env.OPENPROOF_PROTOCOL==='2';
+const path=v2?'reports/deployment-social-v2.json':'reports/deployment.json';
 let state=existsSync(path)?JSON.parse(readFileSync(path,'utf8')):{network:'testnet-bradbury',chainId:4221,sdk:'1.1.8',deployer:account.address};
 const save=()=>writeFileSync(path,JSON.stringify(state,null,2));
 try{
@@ -13,11 +14,11 @@ try{
   if(state.txId)throw new Error('Deployment already submitted; use status.');
   const balance=await client.getBalance({address:account.address});state.balanceBefore=balance.toString();save();
   if(balance===0n)throw new Error('Fund the testnet account first.');
-  const txId=await client.deployContract({code:readFileSync('contracts/openproof.py','utf8'),args:[]});
+  const txId=await client.deployContract({code:readFileSync(v2?'contracts/openproof_v2.py':'contracts/openproof.py','utf8'),args:[]});
   state.txId=txId;state.submittedAt=new Date().toISOString();save();console.log(JSON.stringify(state));
  }else if(mode==='status'){
   const tx=await client.getTransaction({hash:state.txId});
-  state.status=tx.statusName||tx.status;state.execution=tx.txExecutionResultName;state.contract=tx.to_address||tx.recipient||tx.txDataDecoded?.contractAddress;state.balanceAfter=(await client.getBalance({address:account.address})).toString();save();writeFileSync('reports/deployment-receipt.json',JSON.stringify(tx,(_,v)=>typeof v==='bigint'?v.toString():v,2));console.log(JSON.stringify(state));
+  state.status=tx.statusName||tx.status;state.execution=tx.txExecutionResultName;state.contract=tx.to_address||tx.recipient||tx.txDataDecoded?.contractAddress;state.balanceAfter=(await client.getBalance({address:account.address})).toString();save();writeFileSync(v2?'reports/deployment-social-v2-receipt.json':'reports/deployment-receipt.json',JSON.stringify(tx,(_,v)=>typeof v==='bigint'?v.toString():v,2));console.log(JSON.stringify(state));
  }else if(mode==='probe'){
   const probeId=process.argv[3]||'public-docs';const source=process.argv[4]||'https://docs.genlayer.com/developers/networks';
   const txId=await client.writeContract({address:state.contract,functionName:'probe',args:[probeId,source],value:0n});

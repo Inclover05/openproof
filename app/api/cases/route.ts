@@ -40,10 +40,11 @@ export async function POST(request: Request) {
       evidence: JSON.parse(snapshot.evidence),
       createdAt: new Date().toISOString(),
       state: "draft",
+      protocolVersion: 2,
     };
     await database()
       .prepare(
-        "INSERT OR IGNORE INTO cases (id,record,created_at) VALUES (?,?,?)",
+        "INSERT INTO cases (id,record,created_at) VALUES (?,?,?) ON CONFLICT (id) DO NOTHING",
       )
       .bind(record.id, JSON.stringify(record), record.createdAt)
       .run();

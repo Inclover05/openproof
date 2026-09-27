@@ -1,7 +1,7 @@
 import { abi, createClient } from "genlayer-js";
 import { testnetBradbury } from "genlayer-js/chains";
 import { encodeFunctionData, formatEther, type Address, type Abi } from "viem";
-import { CONTRACT, payload } from "./network";
+import { contractFor, payload } from "./network";
 import type { CaseRecord } from "./domain";
 export async function quote(record: CaseRecord, account: Address) {
   const client = createClient({ chain: testnetBradbury, account });
@@ -19,7 +19,7 @@ export async function quote(record: CaseRecord, account: Address) {
   }) as { inputs: unknown[] };
   const baseArgs = [
     account,
-    CONTRACT,
+    contractFor(record),
     testnetBradbury.defaultNumberOfInitialValidators,
     testnetBradbury.defaultConsensusMaxRotations,
     data,

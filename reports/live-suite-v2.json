@@ -1,0 +1,309 @@
+[
+  {
+    "name": "base-owner-match",
+    "expectedOutcome": "Supported",
+    "record": {
+      "id": "2735f336-d5cf-417c-a267-8f0918455293",
+      "input": {
+        "type": "control",
+        "verification": "state",
+        "chain": "8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "source": "",
+        "cutoff": "2026-09-27T08:00:00Z",
+        "field": "owner()",
+        "expected": "0x3abd6f64a422225e61e435bae41db12096106df7",
+        "claim": "Historical comparison test: the Base USDC owner() value equals the expected address at the cutoff."
+      },
+      "evidence": [
+        {
+          "id": "chain-1",
+          "kind": "chain",
+          "title": "Contract state at cutoff",
+          "url": "https://basescan.org/address/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "chainId": 8453,
+          "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "retrievedAt": "2026-09-27T08:53:20.783Z",
+          "status": "readable",
+          "detail": "Observed owner() at block 51853326. The next block is after the cutoff. This single field does not establish broader control, continuous restrictions, or absence of alternative withdrawal paths.",
+          "block": 51853326,
+          "blockHash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+          "timestamp": "2026-09-27T07:59:59.000Z",
+          "value": "0x3abd6f64a422225e61e435bae41db12096106df7"
+        }
+      ],
+      "createdAt": "2026-09-27T08:53:28.396Z",
+      "state": "appeal window",
+      "protocolVersion": 2,
+      "txId": "0x259c11b194cda509bd3b46814866a2a1bbf733974c22e4337bfef636c2d07baf",
+      "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
+      "execution": "FINISHED_WITH_RETURN",
+      "outcome": "Supported",
+      "explanation": "The historical field supports the exact comparison.",
+      "reasonCode": "FIELD_MATCH",
+      "decisiveRefs": [
+        "chain-1"
+      ],
+      "evaluatedAt": "2026-09-27T08:56:18Z"
+    },
+    "balanceBefore": "7992741109530709100",
+    "txId": "0x259c11b194cda509bd3b46814866a2a1bbf733974c22e4337bfef636c2d07baf",
+    "status": "ACCEPTED",
+    "execution": "FINISHED_WITH_RETURN",
+    "votes": [
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE"
+    ],
+    "result": {
+      "block_hash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+      "case_id": "2735f336-d5cf-417c-a267-8f0918455293",
+      "claim_type": "control",
+      "decisive_evidence_refs": [
+        "chain-1"
+      ],
+      "evaluated_at": "2026-09-27T08:56:18Z",
+      "explanation": "The historical field supports the exact comparison.",
+      "input_hash": "bed0d3233623f6c1806681556b35cd5d751870901ace8fd2dfba15a236fe90dc",
+      "observed_value": "0x3abd6f64a422225e61e435bae41db12096106df7",
+      "outcome": "Supported",
+      "reason_code": "FIELD_MATCH",
+      "verification": "state"
+    }
+  },
+  {
+    "name": "base-owner-mismatch",
+    "expectedOutcome": "Contradicted",
+    "record": {
+      "id": "d7ca8a0d-92cd-4d16-b68d-9ba999205c4d",
+      "input": {
+        "type": "control",
+        "verification": "state",
+        "chain": "8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "source": "",
+        "cutoff": "2026-09-27T08:00:00Z",
+        "field": "owner()",
+        "expected": "0x0000000000000000000000000000000000000000",
+        "claim": "Historical comparison test: the Base USDC owner() value equals the expected address at the cutoff."
+      },
+      "evidence": [
+        {
+          "id": "chain-1",
+          "kind": "chain",
+          "title": "Contract state at cutoff",
+          "url": "https://basescan.org/address/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "chainId": 8453,
+          "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "retrievedAt": "2026-09-27T08:53:28.397Z",
+          "status": "readable",
+          "detail": "Observed owner() at block 51853326. The next block is after the cutoff. This single field does not establish broader control, continuous restrictions, or absence of alternative withdrawal paths.",
+          "block": 51853326,
+          "blockHash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+          "timestamp": "2026-09-27T07:59:59.000Z",
+          "value": "0x3abd6f64a422225e61e435bae41db12096106df7"
+        }
+      ],
+      "createdAt": "2026-09-27T08:53:35.318Z",
+      "state": "appeal window",
+      "protocolVersion": 2,
+      "txId": "0x54ccd96d12ba9ce5f10e7865be3d93d6672134b0c388cb4261b82d26edac809e",
+      "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
+      "execution": "FINISHED_WITH_RETURN",
+      "outcome": "Contradicted",
+      "explanation": "The historical field contradicts the exact comparison.",
+      "reasonCode": "FIELD_MISMATCH",
+      "decisiveRefs": [
+        "chain-1"
+      ],
+      "evaluatedAt": "2026-09-27T08:56:59Z"
+    },
+    "balanceBefore": "7992587594400496700",
+    "txId": "0x54ccd96d12ba9ce5f10e7865be3d93d6672134b0c388cb4261b82d26edac809e",
+    "status": "ACCEPTED",
+    "execution": "FINISHED_WITH_RETURN",
+    "votes": [
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE"
+    ],
+    "result": {
+      "block_hash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+      "case_id": "d7ca8a0d-92cd-4d16-b68d-9ba999205c4d",
+      "claim_type": "control",
+      "decisive_evidence_refs": [
+        "chain-1"
+      ],
+      "evaluated_at": "2026-09-27T08:56:59Z",
+      "explanation": "The historical field contradicts the exact comparison.",
+      "input_hash": "caf2711e07795a5af2a65c836823975d85eae9b4e7e1e117ae7cbf8ec6156df5",
+      "observed_value": "0x3abd6f64a422225e61e435bae41db12096106df7",
+      "outcome": "Contradicted",
+      "reason_code": "FIELD_MISMATCH",
+      "verification": "state"
+    }
+  },
+  {
+    "name": "base-implementation",
+    "expectedOutcome": "Supported",
+    "record": {
+      "id": "62321760-00ca-4f50-bf31-eaf3dba2594e",
+      "input": {
+        "type": "upgrade",
+        "verification": "state",
+        "chain": "8453",
+        "address": "0x4200000000000000000000000000000000000010",
+        "source": "",
+        "cutoff": "2026-09-27T08:00:00Z",
+        "field": "EIP-1967",
+        "expected": "0xc0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d30010",
+        "claim": "Historical comparison test: the Base bridge EIP-1967 implementation equals the expected address at the cutoff."
+      },
+      "evidence": [
+        {
+          "id": "chain-1",
+          "kind": "chain",
+          "title": "Contract state at cutoff",
+          "url": "https://basescan.org/address/0x4200000000000000000000000000000000000010",
+          "chainId": 8453,
+          "address": "0x4200000000000000000000000000000000000010",
+          "retrievedAt": "2026-09-27T08:53:35.319Z",
+          "status": "readable",
+          "detail": "Observed EIP-1967 at block 51853326. The next block is after the cutoff. This single field does not establish broader control, continuous restrictions, or absence of alternative withdrawal paths.",
+          "block": 51853326,
+          "blockHash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+          "timestamp": "2026-09-27T07:59:59.000Z",
+          "value": "0xc0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d30010"
+        }
+      ],
+      "createdAt": "2026-09-27T08:53:41.859Z",
+      "state": "appeal window",
+      "protocolVersion": 2,
+      "txId": "0x9e61ace112343583864c822d40679c5d9d7d4c035b7ee550dcfbf8eb5c84601c",
+      "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
+      "execution": "FINISHED_WITH_RETURN",
+      "outcome": "Supported",
+      "explanation": "The historical field supports the exact comparison.",
+      "reasonCode": "FIELD_MATCH",
+      "decisiveRefs": [
+        "chain-1"
+      ],
+      "evaluatedAt": "2026-09-27T08:58:19Z"
+    },
+    "balanceBefore": "7992435114632810300",
+    "txId": "0x9e61ace112343583864c822d40679c5d9d7d4c035b7ee550dcfbf8eb5c84601c",
+    "status": "ACCEPTED",
+    "execution": "FINISHED_WITH_RETURN",
+    "votes": [
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE"
+    ],
+    "result": {
+      "block_hash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+      "case_id": "62321760-00ca-4f50-bf31-eaf3dba2594e",
+      "claim_type": "upgrade",
+      "decisive_evidence_refs": [
+        "chain-1"
+      ],
+      "evaluated_at": "2026-09-27T08:58:19Z",
+      "explanation": "The historical field supports the exact comparison.",
+      "input_hash": "7eeb4a06f971d0191c292fe868b2b1e254fc3b38811faf19ff09a8930c8f8cd2",
+      "observed_value": "0xc0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d3c0d30010",
+      "outcome": "Supported",
+      "reason_code": "FIELD_MATCH",
+      "verification": "state"
+    }
+  },
+  {
+    "name": "unrelated-x",
+    "expectedOutcome": "Insufficient evidence",
+    "record": {
+      "id": "72f7f19d-e0b1-488f-9ace-a06567b0c37b",
+      "input": {
+        "type": "control",
+        "verification": "promise",
+        "chain": "8453",
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "source": "https://x.com/GenLayer/status/2041643224536592387",
+        "cutoff": "2026-09-27T08:00:00Z",
+        "field": "owner()",
+        "expected": "0x3abd6f64a422225e61e435bae41db12096106df7",
+        "claim": "Negative test fixture: this unrelated public post does not establish a dated promise about Base USDC ownership."
+      },
+      "evidence": [
+        {
+          "id": "source-1",
+          "kind": "source",
+          "title": "Original public source",
+          "url": "https://x.com/GenLayer/status/2041643224536592387",
+          "retrievedAt": "2026-09-27T08:53:41.861Z",
+          "status": "readable",
+          "detail": "Public text retrieved through X’s official embed endpoint. Images, video, threads and author identity are not verified. Validators must retrieve it independently.",
+          "provider": "X public post",
+          "retrievalUrl": "https://publish.x.com/oembed?url=https%3A%2F%2Ftwitter.com%2FGenLayer%2Fstatus%2F2041643224536592387&omit_script=true&dnt=true",
+          "contentFormat": "x-oembed-v1",
+          "hash": "02aa9c4bf592f3d2f1eafea6c44217fcda821484266ec737a20db1028eb2059d",
+          "excerpt": "Ranked chains that can interpret natural language, resolve disputes, and enforce agreements through AI-native consensus. NOTE: we tried to fill the other tiers but couldn&#39;t 🤷 pic.twitter.com/f5PVN5Uxs6",
+          "publishedAt": "2026-04-07T22:24:11.283Z"
+        },
+        {
+          "id": "chain-1",
+          "kind": "chain",
+          "title": "Contract state at cutoff",
+          "url": "https://basescan.org/address/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "chainId": 8453,
+          "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+          "retrievedAt": "2026-09-27T08:53:41.867Z",
+          "status": "readable",
+          "detail": "Observed owner() at block 51853326. The next block is after the cutoff. This single field does not establish broader control, continuous restrictions, or absence of alternative withdrawal paths.",
+          "block": 51853326,
+          "blockHash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+          "timestamp": "2026-09-27T07:59:59.000Z",
+          "value": "0x3abd6f64a422225e61e435bae41db12096106df7"
+        }
+      ],
+      "createdAt": "2026-09-27T08:53:48.320Z",
+      "state": "appeal window",
+      "protocolVersion": 2,
+      "txId": "0x23dfbd5da6b7b8a4cbc2d8e41d751ecb6525bf0765c08c0602fd75868fc27976",
+      "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
+      "execution": "FINISHED_WITH_RETURN",
+      "outcome": "Insufficient evidence",
+      "explanation": "The accessible source did not establish the exact dated promise.",
+      "reasonCode": "SOURCE_NOT_SUFFICIENT",
+      "decisiveRefs": [],
+      "evaluatedAt": "2026-09-27T08:59:49Z"
+    },
+    "balanceBefore": "7992282613118407700",
+    "txId": "0x23dfbd5da6b7b8a4cbc2d8e41d751ecb6525bf0765c08c0602fd75868fc27976",
+    "status": "ACCEPTED",
+    "execution": "FINISHED_WITH_RETURN",
+    "votes": [
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "AGREE",
+      "TIMEOUT"
+    ],
+    "result": {
+      "block_hash": "",
+      "case_id": "72f7f19d-e0b1-488f-9ace-a06567b0c37b",
+      "claim_type": "control",
+      "decisive_evidence_refs": [],
+      "evaluated_at": "2026-09-27T08:59:49Z",
+      "explanation": "The accessible source did not establish the exact dated promise.",
+      "input_hash": "0ba93bb2a86b5dae33edfee8e011145d61e8bd13603e2b48edc77e7441f5d758",
+      "observed_value": "",
+      "outcome": "Insufficient evidence",
+      "reason_code": "SOURCE_NOT_SUFFICIENT",
+      "verification": "promise"
+    }
+  }
+]

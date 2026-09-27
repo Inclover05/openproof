@@ -1,0 +1,14 @@
+.secrets
+.python-tools
+.test-build
+.pytest_cache
+.wrangler
+.sites-runtime
+.openai
+.git
+dist
+outputs
+work
+reports/*receipt-raw*
+*.zip
+*.tar

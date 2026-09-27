@@ -38,26 +38,43 @@ export default function CaseBuilder({
   onOpenChange,
   initialClaim,
   initialType,
+  initialInput,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialClaim: string;
   initialType: ClaimType;
+  initialInput?: CaseInput;
 }) {
   const router = useRouter();
   const [type, setType] = useState<ClaimType>(initialType),
     [claim, setClaim] = useState(initialClaim),
-    [chain, setChain] = useState("1"),
-    [address, setAddress] = useState(""),
-    [source, setSource] = useState(""),
-    [date, setDate] = useState(""),
+    [chain, setChain] = useState<string>(initialInput?.chain || "1"),
+    [address, setAddress] = useState(initialInput?.address || ""),
+    [source, setSource] = useState(initialInput?.source || ""),
+    [date, setDate] = useState(initialInput?.cutoff ? new Date(initialInput.cutoff).toISOString().slice(0,16) : ""),
     [field, setField] = useState<string>(templates[initialType].defaultField),
     [expected, setExpected] = useState(
-      initialType === "treasury"
+      initialInput?.expected || (initialType === "treasury"
         ? ""
-        : "0x0000000000000000000000000000000000000000",
+        : "0x0000000000000000000000000000000000000000"),
     );
   const [snapshotId, setSnapshotId] = useState("");
+  const [verification, setVerification] = useState<"promise" | "state">(initialInput?.verification || "promise");
+  const [corroboratingSource, setCorroboratingSource] = useState(initialInput?.corroboratingSource || "");
+  const [sourceCheck, setSourceCheck] = useState<Evidence | null>(null);
+  const [checkingSource, setCheckingSource] = useState(false);
+  async function checkSource() {
+    setCheckingSource(true);
+    setError("");
+    try {
+      const response = await fetch("/api/source-check", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ url: source }) });
+      const result = await response.json() as {error?: string; evidence: Evidence};
+      if (!response.ok) throw new Error(result.error);
+      setSourceCheck(result.evidence);
+    } catch (e) { setError(e instanceof Error ? e.message : "The source check could not complete."); }
+    finally { setCheckingSource(false); }
+  }
   const [step, setStep] = useState(0),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -71,7 +88,9 @@ export default function CaseBuilder({
       chain,
       address,
       source,
-      cutoff: date ? date + ":00Z" : "",
+      verification,
+      corroboratingSource,
+      cutoff: date ? new Date(date + (date.endsWith("Z") ? "" : "Z")).toISOString() : "",
       field,
       expected,
     });
@@ -156,7 +175,7 @@ export default function CaseBuilder({
           <DialogDescription>
             {
               [
-                "Turn a public promise into a specific, checkable question.",
+                "Check a public promise or an exact historical contract value.",
                 "What we could retrieve, and what still needs to be verified.",
                 "Check the scope before saving your case.",
               ][step]
@@ -184,6 +203,11 @@ export default function CaseBuilder({
               }}
               className="scope-form"
             >
+              <fieldset className="verification-choice">
+                <legend>What would you like to verify?</legend>
+                <label><input type="radio" name="verification" value="promise" checked={verification === "promise"} onChange={() => setVerification("promise")} /><span><b>A public promise</b><small>Connect a dated statement to observable contract state.</small></span></label>
+                <label><input type="radio" name="verification" value="state" checked={verification === "state"} onChange={() => setVerification("state")} /><span><b>Contract state</b><small>Compare one historical value. No public promise required.</small></span></label>
+              </fieldset>
               <div className="form-grid">
                 <div className="field">
                   <label htmlFor="claim-type">Claim template</label>
@@ -226,7 +250,7 @@ export default function CaseBuilder({
                 </div>
               </div>
               <div className="field">
-                <label htmlFor="promise">Public promise</label>
+                <label htmlFor="promise">{verification === "state" ? "Statement to check" : "Public promise"}</label>
                 <textarea
                   id="promise"
                   value={claim}
@@ -239,22 +263,29 @@ export default function CaseBuilder({
               </div>
               <div className="field">
                 <label htmlFor="source-url">
-                  Original public source <Link2 size={14} />
+                  Original public source {verification === "state" ? "· optional" : ""} <Link2 size={14} />
                 </label>
                 <input
                   id="source-url"
                   type="url"
-                  required
+                  required={verification === "promise"}
                   value={source}
-                  onChange={(e) => setSource(e.target.value)}
-                  placeholder="https://github.com/project/repository/blob/commit/announcement.md"
+                  onChange={(e) => { setSource(e.target.value); setSourceCheck(null); }}
+                  placeholder="https://x.com/project/status/… or https://medium.com/…"
                 />
                 <small>
-                  Use a commit-pinned GitHub source, Etherscan, Basescan, or
-                  supported official documentation. Other hosts are recorded as
-                  blocked.
+                  Public X posts, accessible Medium articles, GitHub permalinks,
+                  explorers, and supported official docs. Login walls, deleted
+                  posts, and paywalls may prevent retrieval.
                 </small>
+                <button type="button" className="secondary" disabled={!source || checkingSource || busy} onClick={() => void checkSource()}>{checkingSource ? "Checking link…" : "Check link access"}</button>
               </div>
+              {sourceCheck ? <EvidenceCard evidence={sourceCheck} /> : null}
+              {verification === "promise" ? <div className="field">
+                <label htmlFor="corroborating-source">Corroborating public source · optional</label>
+                <input id="corroborating-source" type="url" value={corroboratingSource} onChange={(e) => setCorroboratingSource(e.target.value)} placeholder="https://raw.githubusercontent.com/…" />
+                <small>The original link stays in the record. This source must independently establish the same dated promise; it cannot prove what an inaccessible post said.</small>
+              </div> : null}
               <div className="field">
                 <label htmlFor="contract-address">Contract address</label>
                 <input
@@ -332,9 +363,9 @@ export default function CaseBuilder({
                 <div className="alternative">
                   <h3>A source missing?</h3>
                   <p>
-                    Use an official repository permalink or the verified
-                    explorer for this address. Choose the replacement yourself
-                    and retain the original in your notes.
+                    Keep the original link and add a corroborating source that
+                    independently establishes the same promise. For an exact
+                    historical value without a public promise, choose Contract state.
                   </p>
                   <a
                     href={
@@ -363,6 +394,7 @@ export default function CaseBuilder({
                 <p>{input ? question(input) : ""}</p>
               </div>
               <dl className="review-list">
+                <div><dt>Verification mode</dt><dd>{verification === "state" ? "Historical contract state" : "Public promise and contract state"}</dd></div>
                 <div>
                   <dt>Evidence references</dt>
                   <dd>

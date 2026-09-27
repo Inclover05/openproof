@@ -1,5 +1,6 @@
 import { caseSchema } from "@/lib/domain";
-import { inspectChain, inspectSource } from "@/lib/evidence";
+import { inspectChain } from "@/lib/evidence";
+import { inspectPublicSource } from "@/lib/source-adapters";
 import { readBody, limit, database, failure } from "@/lib/server";
 export async function POST(request: Request) {
   try {
@@ -11,7 +12,8 @@ export async function POST(request: Request) {
       );
     await limit(request, "evidence");
     const evidence = await Promise.all([
-      inspectSource(parsed.data),
+      ...(parsed.data.source?[inspectPublicSource(parsed.data.source)]:[]),
+      ...(parsed.data.corroboratingSource?[inspectPublicSource(parsed.data.corroboratingSource,'source-2')]:[]),
       inspectChain(parsed.data),
     ]);
     const snapshotId = crypto.randomUUID();

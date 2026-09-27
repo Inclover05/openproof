@@ -42,6 +42,8 @@ export function EvidenceCard({
         </div>
       ) : null}
       <dl className="evidence-meta">
+        {e.provider ? <div><dt>Retrieval provider</dt><dd>{e.provider}</dd></div> : null}
+        {e.publishedAt ? <div><dt>{e.contentFormat === "x-oembed-v1" ? "Post ID timestamp" : "Page publication date"}</dt><dd>{e.publishedAt}</dd></div> : null}
         {e.chainId ? (
           <>
             <div>
@@ -100,6 +102,7 @@ export function EvidenceCard({
           <ExternalLink size={13} />
         </a>
       )}
+      {e.retrievalUrl && e.retrievalUrl !== e.url ? <a className="source-link" href={e.retrievalUrl} target="_blank" rel="noreferrer">Inspect retrieval endpoint <ExternalLink size={13} /></a> : null}
     </article>
   );
 }

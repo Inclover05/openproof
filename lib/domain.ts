@@ -31,13 +31,11 @@ export const caseSchema = z
       .min(25, "Describe the promise in at least 25 characters.")
       .max(1200),
     type: z.enum(["treasury", "control", "upgrade"]),
+    verification: z.enum(["promise", "state"]).optional(),
     chain: z.enum(["1", "8453"]),
     address: addressSchema,
-    source: z
-      .string()
-      .url("Enter a full public https:// source URL.")
-      .max(1500)
-      .refine((s) => s.startsWith("https://"), "Use an HTTPS source."),
+    source: z.string().max(1500),
+    corroboratingSource: z.string().max(1500).optional(),
     cutoff: z
       .string()
       .datetime({ offset: true })
@@ -53,6 +51,8 @@ export const caseSchema = z
     expected: z.string().min(1).max(80),
   })
   .superRefine((v, ctx) => {
+    if(v.verification!=="state"&&!v.source)ctx.addIssue({code:"custom",path:["source"],message:"A public promise needs an original source."});
+    for(const key of ["source","corroboratingSource"] as const){const value=v[key];if(value){try{if(new URL(value).protocol!=="https:")throw new Error();}catch{ctx.addIssue({code:"custom",path:[key],message:"Enter a complete HTTPS source URL."});}}}
     if (v.type === "control" && v.field !== "owner()")
       ctx.addIssue({
         code: "custom",
@@ -112,6 +112,10 @@ export interface Evidence {
   timestamp?: string;
   value?: string;
   excerpt?: string;
+  retrievalUrl?: string;
+  provider?: string;
+  contentFormat?: "raw-v1" | "x-oembed-v1" | "medium-article-v1";
+  publishedAt?: string;
 }
 export interface CaseRecord {
   id: string;
@@ -138,6 +142,7 @@ export interface CaseRecord {
   evaluatedAt?: string;
   canAppeal?: boolean;
   appealCharge?: string;
+  protocolVersion?: 2;
 }
 export function question(v: CaseInput) {
   const who = `${v.address.slice(0, 8)}…${v.address.slice(-6)} on ${v.chain === "1" ? "Ethereum" : "Base"}`;
@@ -162,6 +167,14 @@ export const SOURCE_HOSTS = [
   "docs.genlayer.com",
   "etherscan.io",
   "basescan.org",
+  "medium.com",
+  "www.medium.com",
+  "x.com",
+  "www.x.com",
+  "twitter.com",
+  "www.twitter.com",
+  "developers.circle.com",
+  "blog.base.org",
 ];
 export function eligibleSource(raw: string) {
   try {
@@ -171,7 +184,7 @@ export function eligibleSource(raw: string) {
       !u.username &&
       !u.password &&
       (!u.port || u.port === "443") &&
-      SOURCE_HOSTS.includes(u.hostname) &&
+      (SOURCE_HOSTS.includes(u.hostname) || /^[a-z0-9-]+\.medium\.com$/.test(u.hostname)) &&
       !u.hash
     );
   } catch {
