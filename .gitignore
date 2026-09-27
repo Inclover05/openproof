@@ -56,3 +56,4 @@ __pycache__/
 .test-build/
 .vercel
 .env*
+skills-lock.json
