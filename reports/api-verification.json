@@ -1,7 +1,7 @@
 {
-  "root": "http://127.0.0.1:3000",
-  "checkedAt": "2026-09-27T09:00:39.397Z",
-  "caseId": "933337e8-fe6d-47de-9f77-ca4983de457e",
+  "root": "https://openproof-three.vercel.app",
+  "checkedAt": "2026-09-27T13:43:24.885Z",
+  "caseId": "fbc10498-c7c6-4d64-af03-8f2cb7d08cb0",
   "checks": [
     {
       "name": "Legacy finalized case survives database migration",

@@ -33,7 +33,7 @@
         }
       ],
       "createdAt": "2026-09-27T08:53:28.396Z",
-      "state": "appeal window",
+      "state": "finalized",
       "protocolVersion": 2,
       "txId": "0x259c11b194cda509bd3b46814866a2a1bbf733974c22e4337bfef636c2d07baf",
       "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
@@ -107,7 +107,7 @@
         }
       ],
       "createdAt": "2026-09-27T08:53:35.318Z",
-      "state": "appeal window",
+      "state": "finalized",
       "protocolVersion": 2,
       "txId": "0x54ccd96d12ba9ce5f10e7865be3d93d6672134b0c388cb4261b82d26edac809e",
       "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
@@ -181,7 +181,7 @@
         }
       ],
       "createdAt": "2026-09-27T08:53:41.859Z",
-      "state": "appeal window",
+      "state": "finalized",
       "protocolVersion": 2,
       "txId": "0x9e61ace112343583864c822d40679c5d9d7d4c035b7ee550dcfbf8eb5c84601c",
       "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
@@ -270,7 +270,7 @@
         }
       ],
       "createdAt": "2026-09-27T08:53:48.320Z",
-      "state": "appeal window",
+      "state": "finalized",
       "protocolVersion": 2,
       "txId": "0x23dfbd5da6b7b8a4cbc2d8e41d751ecb6525bf0765c08c0602fd75868fc27976",
       "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",

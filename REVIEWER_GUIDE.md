@@ -1,10 +1,11 @@
-# Two-minute OpenProof review
+# OpenProof reviewer walkthrough
 
-1. Open the workspace. No wallet is requested. Choose a sample to inspect evidence, timeline and scope limits; its illustrative outcome is clearly labelled.
-2. Choose **Inspect the live test**. The deliberately unrelated source produced **Insufficient evidence**. Execution succeeded with five agreeing validators. **View network transaction** opens the actual transaction.
-3. Choose **Build a case**. Enter a neutral dated promise, supported HTTPS source, exact contract, chain and historical UTC cutoff. Ownership checks only `owner()`; treasury only `unlockTime()`; contract changes only the EIP-1967 implementation slot.
-4. Collect evidence. Review the exact question, source hash, block/time mapping and failures. Readability is not proof of relevance. Historical state can be unavailable even when the block is known.
-5. Review and save. Copy the link or download JSON. Reload to check persistence. Corrections belong in a new case so original evidence remains traceable.
-6. Optional: use a wallet-enabled browser to review the live fee. Confirm Bradbury and the zero transfer. Stop at any wallet security warning. Accepted status must also have successful execution before an outcome appears. Refresh or attach an existing transaction ID instead of resubmitting after a timeout.
+Use https://openproof-three.vercel.app and the full [demo guide](DEMO_GUIDE.md).
 
-The hosted Site is initially owner-private. Wallet behavior on its published domain needs a real wallet check. This build does not offer universal historical-chain coverage or legal determinations.
+1. Open How it works and switch between the three labelled illustrative outcomes.
+2. Open Matching owner, inspect the historical Base observation, successful execution, finalized lifecycle, and transaction link.
+3. Open Different owner to see a contradiction against the same historical state.
+4. Open Unrelated X source to see that readable content can still be insufficient.
+5. Create a revised case, collect fresh evidence, review, and save. A draft has no verdict. Wallet submission is a separate reviewed testnet action.
+
+Source: https://github.com/Inclover05/openproof (private). Tests and exact transaction evidence are in reports/. The old private Sites deployment remains available with its prior cases.

@@ -47,6 +47,7 @@
     ".test-build",
     ".vercel",
     "dist",
-    ".wrangler"
+    ".wrangler",
+    "vite.config.ts"
   ]
 }

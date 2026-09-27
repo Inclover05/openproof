@@ -1,0 +1,27 @@
+{
+  "url": "https://openproof-three.vercel.app",
+  "repository": "https://github.com/Inclover05/openproof",
+  "vercelProject": "prj_Qj9yfpJoSFONRopRUJ0e9anfcJky",
+  "initialSuccessfulDeployment": "dpl_47sAdxgR5NtmyrdnRbdrUCimxaUS",
+  "checkedAt": "2026-09-27T13:46:40.997405+00:00",
+  "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
+  "checks": {
+    "contractFixtures": 30,
+    "javascriptRegression": 11,
+    "productionApi": 12,
+    "liveJudgments": 4,
+    "liveJudgmentsFinalized": 4,
+    "productionMobileXPreflight": "pass",
+    "mobileOverflow": "none at 390px",
+    "browserErrors": "none in checked journeys",
+    "pdfGuide": "8 pages visually reviewed"
+  },
+  "limitations": [
+    "No positive live public-promise treasury case",
+    "No wallet-extension signing on final public domain",
+    "No public appeal-signing flow",
+    "No sustained load test",
+    "Medium example was blocked; public article access is conditional"
+  ],
+  "privacy": "Original private Sites cases remain on original hosting; labelled public test cases seeded into Neon."
+}

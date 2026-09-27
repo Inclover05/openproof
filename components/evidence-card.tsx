@@ -6,6 +6,12 @@ import {
   AlertCircle,
 } from "lucide-react";
 import type { Evidence } from "@/lib/domain";
+function displayText(text: string) {
+  return text.replace(/&#(x[0-9a-f]+|\d+);|&(amp|lt|gt|quot|apos|nbsp);/gi, (match, numeric: string | undefined, named: string | undefined) => {
+    if (numeric) { const code = numeric[0].toLowerCase() === "x" ? parseInt(numeric.slice(1), 16) : Number(numeric); return code > 0 && code <= 0x10ffff ? String.fromCodePoint(code) : match; }
+    return ({amp:"&",lt:"<",gt:">",quot:'"',apos:"'",nbsp:" "} as Record<string,string>)[named!.toLowerCase()] || match;
+  });
+}
 export function EvidenceCard({
   evidence: e,
   sample = false,
@@ -34,7 +40,7 @@ export function EvidenceCard({
       </div>
       <h3>{e.title}</h3>
       <p>{e.detail}</p>
-      {e.excerpt ? <blockquote>{e.excerpt}</blockquote> : null}
+      {e.excerpt ? <blockquote>{displayText(e.excerpt)}</blockquote> : null}
       {e.value ? (
         <div className="observed">
           <span>Observed value</span>
