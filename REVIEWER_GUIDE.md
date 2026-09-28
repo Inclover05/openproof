@@ -8,4 +8,4 @@ Use https://openproof-three.vercel.app and the [project and user guide](PROJECT_
 4. Open Unrelated X source to see that readable content can still be insufficient.
 5. Create a revised case, collect fresh evidence, review, and save. A draft has no verdict. Wallet submission is a separate reviewed testnet action.
 
-Main Bradbury contract: https://explorer-bradbury.genlayer.com/address/0xB74B3339695C50C6d16168708e2B22A7D6D72EAB. Source: https://github.com/Inclover05/openproof (currently private). Tests and exact transaction evidence are in reports/. The old private Sites deployment remains available with its prior cases.
+Main Bradbury contract: https://explorer-bradbury.genlayer.com/address/0xB74B3339695C50C6d16168708e2B22A7D6D72EAB. Source: https://github.com/Inclover05/openproof (public). Tests and exact transaction evidence are in reports/. The old private Sites deployment remains available with its prior cases.

@@ -35,7 +35,7 @@ Live application: https://openproof-three.vercel.app
 
 Project and user guide: https://openproof-three.vercel.app/OpenProof-Project-and-User-Guide.pdf
 
-Vercel project: `inclover05s-projects/openproof`. Source repository: https://github.com/Inclover05/openproof (private).
+Vercel project: `inclover05s-projects/openproof`. Source repository: https://github.com/Inclover05/openproof (public).
 
 Current v2 contract: `0xB74B3339695C50C6d16168708e2B22A7D6D72EAB` on Bradbury, chain 4221. Legacy v1 records retain `0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe` and their exact original payloads. See `reports/deployment-social-v2.json` and `reports/live-suite-v2.json` for live execution details.
 

@@ -30,7 +30,7 @@ story=[];i=0
 while i<len(lines):
     line=lines[i].strip();i+=1
     if not line:continue
-    if line=='---':story.append(PageBreak());continue
+    if line=='---':story.extend([PageBreak(),Spacer(1,12)]);continue
     if line.startswith('|'):
         rows=[line]
         while i<len(lines) and lines[i].strip().startswith('|'):rows.append(lines[i].strip());i+=1

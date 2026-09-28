@@ -90,7 +90,7 @@ OpenProof uses a supported-host policy and refuses private-network source addres
 
 A saved case on the public website can be opened by anyone who has its URL. A submitted Bradbury transaction is public on the testnet. I therefore ask users to keep private information, seed phrases, and private keys out of statements and source fields. OpenProof needs a wallet signature only when you choose to submit; reading and saving do not require one.
 
-The project repository is private. The public application and shareable case URLs are separate from repository access. If you need to show someone the code, I must give them access to the repository.
+The project repository is public, so anyone can inspect the source code alongside the shareable cases. A case URL is still an unlisted link rather than an access-controlled private record.
 
 ---
 
@@ -113,7 +113,7 @@ Read the contract record: https://explorer-bradbury.genlayer.com/address/0xB74B3
 The earlier OpenProof version 1 address is **0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe**. It remains relevant to older records. Addresses such as Base USDC or the Base bridge are contracts a case might inspect; they are not additional OpenProof decision contracts.
 
 - Website: https://openproof-three.vercel.app
-- Source repository: https://github.com/Inclover05/openproof (private)
+- Source repository: https://github.com/Inclover05/openproof (public)
 - GenLayer web access reference: https://docs.genlayer.com/developers/intelligent-contracts/features/web-access
 - GenLayer transaction reference: https://docs.genlayer.com/understand-genlayer-protocol/core-concepts/transactions
 
