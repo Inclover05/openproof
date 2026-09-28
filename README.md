@@ -33,7 +33,7 @@ Use Node 22.13 or newer. Install with `npm ci`. Link the correct Vercel project 
 
 Live application: https://openproof-three.vercel.app
 
-Demo guide: https://openproof-three.vercel.app/OpenProof-Project-and-Demo-Guide.pdf
+Project and user guide: https://openproof-three.vercel.app/OpenProof-Project-and-User-Guide.pdf
 
 Vercel project: `inclover05s-projects/openproof`. Source repository: https://github.com/Inclover05/openproof (private).
 
@@ -41,8 +41,8 @@ Current v2 contract: `0xB74B3339695C50C6d16168708e2B22A7D6D72EAB` on Bradbury, c
 
 The original private Sites deployment is preserved at https://openproof-evidence.inclover05.chatgpt.site. Private user-created cases remain there; only explicitly labelled public test records are seeded into the new Vercel database. Earlier D1 migrations and feasibility reports are retained as history.
 
-## Demo and verification
+## Project guide and verification
 
-Read `DEMO_GUIDE.md` for a walkthrough, internet-derived test inputs, expected results, observed results, and limitations. The homepage includes an interactive explanation and links to real network-assessed cases. Fictional sample cases are clearly labelled.
+Read `PROJECT_GUIDE.md` for the project's uses, user experience, evidence outcomes, and limits. The homepage includes an interactive explanation and links to real network-assessed cases. Fictional sample cases are clearly labelled. Recorded checks remain in `reports/` and the test scripts.
 
 Public sharing is read-only; case IDs are unlisted identifiers, not authentication. Do not store private information. The free providers and testnet can rate-limit or change. A supported bounded comparison is not a security audit, proof of identity, investment recommendation, or legal finding.
