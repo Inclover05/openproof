@@ -23,6 +23,6 @@ export default function ProjectGuide({onStart}:{onStart:()=>void}) {
       <details><summary>Why does “readable” not mean “verified”?</summary><p>A readable article may describe a different contract, lack a date, or say nothing about the submitted promise. Public promise mode requires those facts to line up. Contract state mode answers only the exact field comparison and makes no claim that a team promised it.</p></details>
       <details><summary>What will this cost, and what becomes public?</summary><p>Exploring and saving are free. Submitting requires a Bradbury testnet wallet and test GEN for gas. You see a fresh estimate before signing. Shared cases are readable by anyone with the link; testnet submissions are public. Do not include private information. Never ignore a wallet security warning.</p></details>
     </div>
-    <p className="guide-download"><a className="secondary" href="/OpenProof-Project-and-Demo-Guide.pdf" target="_blank" rel="noreferrer">Download the project and demo guide <ArrowRight size={16}/></a></p>
+    <p className="guide-download"><a className="secondary" href="/OpenProof-Project-and-User-Guide.pdf" target="_blank" rel="noreferrer">Download the project and user guide <ArrowRight size={16}/></a></p>
   </section>;
 }

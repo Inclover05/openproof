@@ -293,8 +293,8 @@ export default function OpenProof() {
             </button>
           </div>
         </section>
-        <section className="live-proof" aria-label="Live testnet verification">
-          <div><span className="eyebrow">REAL TESTNET CASES</span><h2>Three outcomes. Inspect the evidence.</h2><p>Historical Base observations and an unrelated public X post, independently assessed on Bradbury. These are labelled tests, not allegations about a project.</p></div>
+        <section className="live-proof" aria-label="Cases assessed on Bradbury">
+          <div><span className="eyebrow">ASSESSED CASES</span><h2>Three outcomes. Inspect the evidence.</h2><p>See how a matching value, a different value, and an unrelated X post led to different outcomes on Bradbury. Each finding is limited to its stated question; none is an allegation about a project.</p></div>
           <div className="live-links"><Link className="secondary" href="/case/2735f336-d5cf-417c-a267-8f0918455293">Matching owner <ArrowUpRight size={16}/></Link><Link className="secondary" href="/case/d7ca8a0d-92cd-4d16-b68d-9ba999205c4d">Different owner <ArrowUpRight size={16}/></Link><Link className="secondary" href="/case/72f7f19d-e0b1-488f-9ace-a06567b0c37b">Unrelated X source <ArrowUpRight size={16}/></Link></div>
         </section>
         <ProjectGuide onStart={() => setScope(true)} />

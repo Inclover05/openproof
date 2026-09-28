@@ -1,4 +1,5 @@
 from pathlib import Path
+from shutil import copyfile
 import re
 from xml.sax.saxutils import escape
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, PageBreak, Table, TableStyle
@@ -8,7 +9,7 @@ from reportlab.lib.enums import TA_LEFT
 from reportlab.lib.pagesizes import A4
 
 root=Path(__file__).resolve().parent.parent
-out=root/'public'/'OpenProof-Project-and-Demo-Guide.pdf'
+out=root/'public'/'OpenProof-Project-and-User-Guide.pdf'
 out.parent.mkdir(exist_ok=True)
 styles=getSampleStyleSheet()
 styles.add(ParagraphStyle(name='GuideTitle',fontName='Helvetica-Bold',fontSize=25,leading=30,spaceAfter=19,textColor=colors.black))
@@ -24,7 +25,7 @@ def inline(s):
     s=re.sub(r'`(.+?)`',r'<font name="Courier">\1</font>',s)
     s=re.sub(r'(https://[^\s<]+)',r'<link href="\1" color="#245943">\1</link>',s)
     return s
-lines=(root/'DEMO_GUIDE.md').read_text(encoding='utf-8').splitlines()
+lines=(root/'PROJECT_GUIDE.md').read_text(encoding='utf-8-sig').splitlines()
 story=[];i=0
 while i<len(lines):
     line=lines[i].strip();i+=1
@@ -50,7 +51,8 @@ while i<len(lines):
     else:story.append(Paragraph(inline(line),styles['GuideBody']))
 def footer(canvas,doc):
     canvas.saveState();canvas.setFont('Helvetica',8);canvas.setFillColor(colors.HexColor('#68736d'))
-    canvas.drawString(50,28,'OpenProof | Project and demo guide | 27 September 2026')
+    canvas.drawString(50,28,'OpenProof | Project and user guide | 28 September 2026')
     canvas.drawRightString(A4[0]-50,28,str(doc.page));canvas.restoreState()
-SimpleDocTemplate(str(out),pagesize=A4,rightMargin=50,leftMargin=50,topMargin=45,bottomMargin=48,title='OpenProof project and demo guide',author='OpenProof',pageCompression=1).build(story,onFirstPage=footer,onLaterPages=footer)
+SimpleDocTemplate(str(out),pagesize=A4,rightMargin=50,leftMargin=50,topMargin=45,bottomMargin=48,title='OpenProof project and user guide',author='OpenProof',pageCompression=1).build(story,onFirstPage=footer,onLaterPages=footer)
+copyfile(out,root/'public'/'OpenProof-Project-and-Demo-Guide.pdf')
 print(out)
