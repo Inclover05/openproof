@@ -12,6 +12,17 @@ import type { CaseRecord } from "@/lib/domain";
 type Provider = {
   request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
 };
+const BRADBURY_WALLET_RPC = "https://rpc.testnet-chain.genlayer.com";
+function walletError(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  if (
+    /eth_sendRawTransaction|cannot unmarshal string into Go struct field Request\.id|parse error as single request/i.test(
+      message,
+    )
+  )
+    return `Bradbury rejected your wallet's RPC request. In your wallet's Bradbury network settings, set the default RPC URL to ${BRADBURY_WALLET_RPC}, then reconnect and retry. Check wallet history first so you do not submit twice.`;
+  return message;
+}
 declare global {
   interface Window {
     ethereum?: Provider;
@@ -110,7 +121,7 @@ export default function NetworkActions({
                 chainId: "0x107d",
                 chainName: "GenLayer Bradbury Testnet",
                 nativeCurrency: { name: "GEN", symbol: "GEN", decimals: 18 },
-                rpcUrls: ["https://rpc-bradbury.genlayer.com"],
+                rpcUrls: [BRADBURY_WALLET_RPC],
                 blockExplorerUrls: ["https://explorer-bradbury.genlayer.com"],
               },
             ],
@@ -190,11 +201,7 @@ export default function NetworkActions({
       setReview(false);
       await track(txId);
     } catch (e) {
-      setError(
-        e instanceof Error
-          ? e.message
-          : "Submission could not be confirmed. Check wallet history before trying again.",
-      );
+      setError(walletError(e));
     } finally {
       setBusy(false);
     }
@@ -257,6 +264,15 @@ export default function NetworkActions({
               ? "A wallet is needed only to submit. Your wallet shows the final fee. If it displays a security warning, stop."
               : "A verified cutoff block is required. Public promise mode also needs a readable source."}
           </p>
+          <details className="recover">
+            <summary>Bradbury already in your wallet?</summary>
+            <p>
+              Set its default RPC URL to <code>{BRADBURY_WALLET_RPC}</code> before
+              signing. An older Bradbury RPC can reject wallet transactions even
+              when the network shows chain 4221. In MetaMask, open Networks, edit
+              Bradbury, add this RPC URL, and make it the default.
+            </p>
+          </details>
           <details className="recover">
             <summary>Already submitted?</summary>
             <label htmlFor="transaction-id">GenLayer transaction ID</label>

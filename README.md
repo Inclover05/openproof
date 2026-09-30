@@ -28,6 +28,7 @@ Use Node 22.13 or newer. Install with `npm ci`. Link the correct Vercel project 
 - `scripts/verify-api.mjs`: real API and database acceptance checks; set `OPENPROOF_TEST_URL` to the test deployment.
 - `tests/test_contract.py` and `tests/test_contract_v2.py`: direct GenLayer SDK fixture tests; require the compatible `genlayer-test` toolchain.
 - `scripts/live-suite.mjs`: labelled live Bradbury acceptance tests. These spend test GEN and use an ignored local test key; they are not part of the web runtime.
+- `scripts/verify-wallet-rpc.mjs`: labelled production case, quote, wallet-style signing, Bradbury transaction, and result check. It uses the ignored local test key and spends test GEN; run `collect`, `submit`, then `status`. Never retry `submit` if its report has an EVM hash.
 
 ## Deployment and contracts
 
@@ -38,6 +39,8 @@ Project and user guide: https://openproof-three.vercel.app/OpenProof-Project-and
 Vercel project: `inclover05s-projects/openproof`. Source repository: https://github.com/Inclover05/openproof (public).
 
 Current v2 contract: `0xB74B3339695C50C6d16168708e2B22A7D6D72EAB` on Bradbury, chain 4221. Legacy v1 records retain `0x0546Ba4582b7733DB52E3309692BCF7b5B1CAcCe` and their exact original payloads. See `reports/deployment-social-v2.json` and `reports/live-suite-v2.json` for live execution details.
+
+For browser wallets, set Bradbury's default RPC URL to `https://rpc.testnet-chain.genlayer.com`. The SDK still reads intelligent-contract methods through `https://rpc-bradbury.genlayer.com`. The latter currently rejects JSON-RPC string request IDs, which some wallets use when relaying a signed `eth_sendRawTransaction`; the chain RPC accepts them. If Bradbury was already added to a wallet with the older URL, edit the existing network's default RPC URL before signing. The reproduction and wallet-style production transaction are recorded in `reports/wallet-rpc-verification.json`. This provider test mirrors the browser-wallet transaction path but does not replace a check with every wallet extension.
 
 The original private Sites deployment is preserved at https://openproof-evidence.inclover05.chatgpt.site. Private user-created cases remain there; only explicitly labelled public test records are seeded into the new Vercel database. Earlier D1 migrations and feasibility reports are retained as history.
 

@@ -1,0 +1,64 @@
+{
+  "root": "https://openproof-three.vercel.app",
+  "walletRpc": "https://rpc.testnet-chain.genlayer.com",
+  "account": "0xc0CECa4Dd4c72018a506ef6AD20724Df2C36C9A8",
+  "record": {
+    "id": "ae4e2a12-9a0f-458c-a28d-9afd014603f4",
+    "input": {
+      "claim": "Historical comparison test: Base USDC owner() matched the expected address at the cutoff.",
+      "type": "control",
+      "verification": "state",
+      "chain": "8453",
+      "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "source": "",
+      "cutoff": "2026-09-27T08:00:00Z",
+      "field": "owner()",
+      "expected": "0x3abd6f64a422225e61e435bae41db12096106df7"
+    },
+    "evidence": [
+      {
+        "id": "chain-1",
+        "kind": "chain",
+        "title": "Contract state at cutoff",
+        "url": "https://basescan.org/address/0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "chainId": 8453,
+        "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+        "retrievedAt": "2026-09-30T21:34:24.111Z",
+        "status": "readable",
+        "detail": "Observed owner() at block 51853326. The next block is after the cutoff. This single field does not establish broader control, continuous restrictions, or absence of alternative withdrawal paths.",
+        "block": 51853326,
+        "blockHash": "0xe3e4c96db7c1df1815320c1a1133696619b3808729d3749c27d6fb9bdd1c3e69",
+        "timestamp": "2026-09-27T07:59:59.000Z",
+        "value": "0x3abd6f64a422225e61e435bae41db12096106df7"
+      }
+    ],
+    "createdAt": "2026-09-30T21:34:25.830Z",
+    "state": "appeal window",
+    "protocolVersion": 2,
+    "txId": "0xaa3640f5bb72f04cff50f5f127e9319b56b5c7c69e3cb4625f57b95e1357ae46",
+    "contract": "0xB74B3339695C50C6d16168708e2B22A7D6D72EAB",
+    "execution": "FINISHED_WITH_RETURN",
+    "outcome": "Supported",
+    "explanation": "The historical field supports the exact comparison.",
+    "canAppeal": true,
+    "appealCharge": "0",
+    "reasonCode": "FIELD_MATCH",
+    "decisiveRefs": [
+      "chain-1"
+    ],
+    "evaluatedAt": "2026-09-30T21:34:48Z"
+  },
+  "caseUrl": "https://openproof-three.vercel.app/case/ae4e2a12-9a0f-458c-a28d-9afd014603f4",
+  "quote": {
+    "gas": "1194037",
+    "gasPrice": "140301750",
+    "estimatedGen": "0.00016752548066475",
+    "quotedAt": "2026-09-30T21:34:42.247Z",
+    "network": "Bradbury",
+    "chainId": 4221
+  },
+  "stringIdChainId": "0x107d",
+  "evmTxHash": "0xc60b8a13386c70ec8b95a429a8b78c1cb1d96d18cb552f4e3057b4805b01cd72",
+  "txId": "0xaa3640f5bb72f04cff50f5f127e9319b56b5c7c69e3cb4625f57b95e1357ae46",
+  "checkedAt": "2026-09-30T21:37:39.778Z"
+}

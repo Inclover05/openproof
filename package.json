@@ -10,7 +10,7 @@
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
     "start": "next start --hostname 127.0.0.1",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .pytest_cache",
     "db:generate": "drizzle-kit generate",
     "test": "node --test tests/core.mjs",
     "db:migrate": "node --env-file=.env.local scripts/migrate.mjs"

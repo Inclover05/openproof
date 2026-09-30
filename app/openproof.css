@@ -1482,6 +1482,9 @@ footer > span {
   cursor: pointer;
   color: #315d4a;
 }
+.recover code {
+  overflow-wrap: anywhere;
+}
 .recover label {
   display: block;
   margin: 14px 0 6px;
