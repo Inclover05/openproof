@@ -10,20 +10,10 @@ import {
 import { readyForSubmission } from "@/lib/protocol";
 import type { CaseRecord } from "@/lib/domain";
 import {
-  BRADBURY_WALLET_RPC, getServerWallets, getWallets, isBradbury,
+  BRADBURY_WALLET_RPC, explainWalletError, getServerWallets, getWallets, isBradbury,
   prepareBradbury, rediscoverWallets, subscribeWallets,
   type BrowserProvider, type BrowserWallet,
 } from "@/lib/browser-wallets";
-function walletError(error: unknown) {
-  const message = error instanceof Error ? error.message : String(error);
-  if (
-    /eth_sendRawTransaction|cannot unmarshal string into Go struct field Request\.id|parse error as single request/i.test(
-      message,
-    )
-  )
-    return `Bradbury rejected your wallet's RPC request. In your wallet's Bradbury network settings, set the default RPC URL to ${BRADBURY_WALLET_RPC}, then reconnect and retry. Check wallet history first so you do not submit twice.`;
-  return message;
-}
 export default function NetworkActions({
   record,
   onUpdate,
@@ -137,9 +127,7 @@ export default function NetworkActions({
       setReview(true);
     } catch (e) {
       selectedProvider.current = null;
-      setError(
-        e instanceof Error ? e.message : "Wallet connection was declined.",
-      );
+      setError(explainWalletError(e));
     } finally {
       setBusy(false);
     }
@@ -194,7 +182,7 @@ export default function NetworkActions({
       setReview(false);
       await track(txId);
     } catch (e) {
-      setError(walletError(e));
+      setError(explainWalletError(e));
     } finally {
       setBusy(false);
     }

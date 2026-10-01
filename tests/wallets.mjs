@@ -9,7 +9,7 @@ writeFileSync('.test-build/browser-wallets.mjs', ts.transpileModule(
   { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } },
 ).outputText);
 const {
-  BRADBURY_WALLET_RPC, getWallets, isBradbury, prepareBradbury,
+  BRADBURY_WALLET_RPC, explainWalletError, getWallets, isBradbury, prepareBradbury,
   rediscoverWallets, subscribeWallets,
 } = await import('../.test-build/browser-wallets.mjs');
 
@@ -37,6 +37,15 @@ test('three announced wallets remain separately selectable even when window.ethe
   assert.equal(getWallets().length, 3);
   assert.ok(changes >= 3);
   unsubscribe();
+});
+
+test('network outage and wrong wallet RPC have distinct, actionable messages', () => {
+  const outage = explainWalletError(new Error('Unknown RPC error: error sending request for url (http://sequencer-leader.testnet-genlayer.svc.cluster.local:3050/)'));
+  assert.match(outage, /temporarily unavailable/);
+  assert.match(outage, /wallet history/);
+  assert.doesNotMatch(outage, /cluster\.local/);
+  const wrongRpc = explainWalletError(new Error('eth_sendRawTransaction: json: cannot unmarshal string into Go struct field Request.id'));
+  assert.match(wrongRpc, /rpc\.testnet-chain\.genlayer\.com/);
 });
 
 test('chain switching, adding an unknown chain and post-switch validation work for EIP-1193 providers', async () => {
