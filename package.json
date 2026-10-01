@@ -12,7 +12,7 @@
     "start": "next start --hostname 127.0.0.1",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --ignore-pattern .pytest_cache",
     "db:generate": "drizzle-kit generate",
-    "test": "node --test tests/core.mjs",
+    "test": "node --test tests/core.mjs tests/wallets.mjs",
     "db:migrate": "node --env-file=.env.local scripts/migrate.mjs"
   },
   "dependencies": {

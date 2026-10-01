@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef, useSyncExternalStore } from "react";
 import { RefreshCw, Wallet, ExternalLink, LoaderCircle } from "lucide-react";
 import {
   Dialog,
@@ -9,10 +9,11 @@ import {
 } from "@/components/ui/dialog";
 import { readyForSubmission } from "@/lib/protocol";
 import type { CaseRecord } from "@/lib/domain";
-type Provider = {
-  request: (args: { method: string; params?: unknown[] }) => Promise<unknown>;
-};
-const BRADBURY_WALLET_RPC = "https://rpc.testnet-chain.genlayer.com";
+import {
+  BRADBURY_WALLET_RPC, getServerWallets, getWallets, isBradbury,
+  prepareBradbury, rediscoverWallets, subscribeWallets,
+  type BrowserProvider, type BrowserWallet,
+} from "@/lib/browser-wallets";
 function walletError(error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
   if (
@@ -22,11 +23,6 @@ function walletError(error: unknown) {
   )
     return `Bradbury rejected your wallet's RPC request. In your wallet's Bradbury network settings, set the default RPC URL to ${BRADBURY_WALLET_RPC}, then reconnect and retry. Check wallet history first so you do not submit twice.`;
   return message;
-}
-declare global {
-  interface Window {
-    ethereum?: Provider;
-  }
 }
 export default function NetworkActions({
   record,
@@ -38,13 +34,17 @@ export default function NetworkActions({
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
     [review, setReview] = useState(false),
+    [chooseWallet, setChooseWallet] = useState(false),
     [account, setAccount] = useState(""),
+    [walletName, setWalletName] = useState(""),
     [quote, setQuote] = useState<{
       estimatedGen: string;
       quotedAt: string;
     } | null>(null),
     [pending, setPending] = useState(""),
     [manual, setManual] = useState("");
+  const wallets = useSyncExternalStore(subscribeWallets, getWallets, getServerWallets);
+  const selectedProvider = useRef<BrowserProvider | null>(null);
   const key = "openproof-pending-" + record.id;
   useEffect(() => {
     try {
@@ -92,44 +92,33 @@ export default function NetworkActions({
     const timer = setInterval(() => void track(), 60000);
     return () => clearInterval(timer);
   }, [record.txId, record.state, track]);
-  async function connect() {
+  function beginConnect() {
+    setError("");
+    const available = rediscoverWallets();
+    if (!available.length) {
+      setError("No browser wallet was found. Use a wallet-enabled browser for signing. Read-only exploration remains available.");
+    } else if (available.length === 1) {
+      void connect(available[0]);
+    } else {
+      setChooseWallet(true);
+    }
+  }
+  async function connect(wallet: BrowserWallet) {
+    setChooseWallet(false);
     setBusy(true);
     setError("");
+    selectedProvider.current = null;
+    setQuote(null);
     try {
-      const provider = window.ethereum;
-      if (!provider)
-        throw new Error(
-          "No browser wallet was found. Use a wallet-enabled browser for signing. Read-only exploration remains available.",
-        );
+      const provider = wallet.provider;
       const addresses = (await provider.request({
         method: "eth_requestAccounts",
-      })) as string[];
-      if (!addresses[0]) throw new Error("No account selected.");
-      const chain = await provider.request({ method: "eth_chainId" });
-      if (chain !== "0x107d") {
-        try {
-          await provider.request({
-            method: "wallet_switchEthereumChain",
-            params: [{ chainId: "0x107d" }],
-          });
-        } catch (e) {
-          if ((e as { code?: number }).code !== 4902) throw e;
-          await provider.request({
-            method: "wallet_addEthereumChain",
-            params: [
-              {
-                chainId: "0x107d",
-                chainName: "GenLayer Bradbury Testnet",
-                nativeCurrency: { name: "GEN", symbol: "GEN", decimals: 18 },
-                rpcUrls: [BRADBURY_WALLET_RPC],
-                blockExplorerUrls: ["https://explorer-bradbury.genlayer.com"],
-              },
-            ],
-          });
-        }
-      }
-      if ((await provider.request({ method: "eth_chainId" })) !== "0x107d")
-        throw new Error("Select Bradbury testnet before signing.");
+      })) as unknown;
+      if (!Array.isArray(addresses) ||
+          typeof addresses[0] !== "string" ||
+          !/^0x[0-9a-fA-F]{40}$/.test(addresses[0]))
+        throw new Error("No valid account was selected.");
+      await prepareBradbury(provider);
       const r = await fetch("/api/cases/" + record.id + "/quote", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -141,10 +130,13 @@ export default function NetworkActions({
         quotedAt: string;
       };
       if (!r.ok) throw new Error(q.error);
+      selectedProvider.current = provider;
+      setWalletName(wallet.name);
       setAccount(addresses[0]);
       setQuote(q);
       setReview(true);
     } catch (e) {
+      selectedProvider.current = null;
       setError(
         e instanceof Error ? e.message : "Wallet connection was declined.",
       );
@@ -160,13 +152,14 @@ export default function NetworkActions({
         throw new Error(
           "The fee estimate expired. Close this review and request a fresh estimate.",
         );
-      if (!window.ethereum) throw new Error("The wallet disconnected.");
-      const accounts = (await window.ethereum.request({
+      const provider = selectedProvider.current;
+      if (!provider) throw new Error("The selected wallet disconnected. Reconnect before signing.");
+      const accounts = (await provider.request({
         method: "eth_accounts",
       })) as string[];
       if (
         accounts[0]?.toLowerCase() !== account.toLowerCase() ||
-        (await window.ethereum.request({ method: "eth_chainId" })) !== "0x107d"
+        !isBradbury(await provider.request({ method: "eth_chainId" }))
       )
         throw new Error(
           "The selected account or network changed. Reconnect before signing.",
@@ -180,7 +173,7 @@ export default function NetworkActions({
       const client = createClient({
         chain: testnetBradbury,
         account: account as `0x${string}`,
-        provider: window.ethereum as NonNullable<
+        provider: provider as NonNullable<
           Parameters<typeof createClient>[0]
         >["provider"],
       });
@@ -250,7 +243,7 @@ export default function NetworkActions({
           <button
             className="primary"
             disabled={busy || !ready}
-            onClick={connect}
+            onClick={beginConnect}
           >
             {busy ? (
               <LoaderCircle className="spin" size={15} />
@@ -297,6 +290,21 @@ export default function NetworkActions({
           {error}
         </p>
       ) : null}
+      <Dialog open={chooseWallet} onOpenChange={(v) => { if (!busy) setChooseWallet(v); }}>
+        <DialogContent>
+          <DialogTitle>Choose a wallet</DialogTitle>
+          <DialogDescription>
+            Select the browser wallet you want to use for this Bradbury testnet submission.
+          </DialogDescription>
+          <div className="wallet-choices">
+            {wallets.map((wallet) => (
+              <button className="secondary" key={wallet.id} onClick={() => void connect(wallet)}>
+                <Wallet size={16} /> {wallet.name}
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
       <Dialog
         open={review}
         onOpenChange={(v) => {
@@ -310,6 +318,10 @@ export default function NetworkActions({
             public testnet record.
           </DialogDescription>
           <dl className="review-list">
+            <div>
+              <dt>Wallet</dt>
+              <dd>{walletName} · {account.slice(0, 6)}…{account.slice(-4)}</dd>
+            </div>
             <div>
               <dt>Network</dt>
               <dd>Bradbury · 4221</dd>

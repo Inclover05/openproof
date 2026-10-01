@@ -1503,4 +1503,6 @@ footer > span {
 .network-actions .source-link {
   font-size: 13px;
 }
+.wallet-choices { display: grid; gap: 10px; }
+.wallet-choices .secondary { justify-content: flex-start; width: 100%; }
 .live-proof{display:flex;gap:25px;align-items:center;justify-content:space-between;padding:25px 0;margin-top:30px;border-block:1px solid var(--line)}.live-proof h2{font:25px Georgia,serif;margin:10px 0}.live-proof p{font-size:14px;color:#667360;max-width:630px;line-height:1.7}.live-proof a{flex-shrink:0;gap:12px}.intro br:after{content:' '}.network-disclaimer{font-size:13px}@media(max-width:650px){.live-proof{align-items:flex-start;flex-direction:column}.intro br{display:inline}.intro br:after{content:' '}}
