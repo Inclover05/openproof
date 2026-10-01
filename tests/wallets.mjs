@@ -9,7 +9,8 @@ writeFileSync('.test-build/browser-wallets.mjs', ts.transpileModule(
   { compilerOptions: { target: ts.ScriptTarget.ES2022, module: ts.ModuleKind.ESNext } },
 ).outputText);
 const {
-  BRADBURY_WALLET_RPC, explainWalletError, getWallets, isBradbury, prepareBradbury,
+  BRADBURY_WALLET_RPC, explainWalletError, getWallets, isBradbury,
+  isExplicitWalletRejection, prepareBradbury,
   rediscoverWallets, subscribeWallets,
 } = await import('../.test-build/browser-wallets.mjs');
 
@@ -46,6 +47,13 @@ test('network outage and wrong wallet RPC have distinct, actionable messages', (
   assert.doesNotMatch(outage, /cluster\.local/);
   const wrongRpc = explainWalletError(new Error('eth_sendRawTransaction: json: cannot unmarshal string into Go struct field Request.id'));
   assert.match(wrongRpc, /rpc\.testnet-chain\.genlayer\.com/);
+  const generic = explainWalletError(new Error('An internal error was received. Details: Transaction failed Version: viem@2.56.9'));
+  assert.match(generic, /broadcast status is uncertain/);
+  assert.match(generic, /wallet activity/);
+  assert.doesNotMatch(generic, /viem@/);
+  assert.doesNotMatch(explainWalletError(new Error('eth_sendRawTransaction: Internal JSON-RPC error')), /set the default RPC URL/);
+  assert.equal(isExplicitWalletRejection({ cause: { code: 4001 } }), true);
+  assert.equal(isExplicitWalletRejection(new Error('An internal error was received. Details: Transaction failed')), false);
 });
 
 test('chain switching, adding an unknown chain and post-switch validation work for EIP-1193 providers', async () => {

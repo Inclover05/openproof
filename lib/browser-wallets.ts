@@ -26,9 +26,17 @@ export function explainWalletError(error: unknown) {
   const message = error instanceof Error ? error.message : String(error);
   if (/sequencer-leader\.testnet-genlayer|Gateway Timeout/i.test(message))
     return "Bradbury testnet is temporarily unavailable. If you approved a transaction, check your wallet history before retrying; its broadcast status is uncertain.";
-  if (/eth_sendRawTransaction|cannot unmarshal string into Go struct field Request\.id|parse error as single request/i.test(message))
+  if (/cannot unmarshal string into Go struct field Request\.id|parse error as single request/i.test(message))
     return `Bradbury rejected your wallet's RPC request. In your wallet's Bradbury network settings, set the default RPC URL to ${BRADBURY_WALLET_RPC}, then reconnect and retry. Check wallet history first so you do not submit twice.`;
+  if (/internal error was received|transaction failed.*viem@|internal json-rpc error/i.test(message))
+    return "The wallet reported an internal error while sending the Bradbury transaction. Its broadcast status is uncertain. Check wallet activity before retrying; if you find a transaction ID, attach it to this case below.";
   return message;
+}
+
+export function isExplicitWalletRejection(error: unknown) {
+  const message = error instanceof Error ? error.message : String(error);
+  return providerErrorCode(error) === 4001 ||
+    /user (rejected|denied)|rejected the request/i.test(message);
 }
 let host: WalletHost | undefined;
 const announced: BrowserWallet[] = [];
@@ -113,9 +121,13 @@ export function isBradbury(chain: unknown) {
 
 export function providerErrorCode(error: unknown): number | undefined {
   if (!error || typeof error !== "object") return undefined;
-  const value = error as { code?: unknown; data?: { originalError?: unknown } };
+  const value = error as {
+    code?: unknown;
+    data?: { originalError?: unknown };
+    cause?: unknown;
+  };
   if (typeof value.code === "number") return value.code;
-  return providerErrorCode(value.data?.originalError);
+  return providerErrorCode(value.data?.originalError) ?? providerErrorCode(value.cause);
 }
 
 export async function prepareBradbury(provider: BrowserProvider) {

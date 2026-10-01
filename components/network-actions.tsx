@@ -11,7 +11,7 @@ import { readyForSubmission } from "@/lib/protocol";
 import type { CaseRecord } from "@/lib/domain";
 import {
   BRADBURY_WALLET_RPC, explainWalletError, getServerWallets, getWallets, isBradbury,
-  prepareBradbury, rediscoverWallets, subscribeWallets,
+  isExplicitWalletRejection, prepareBradbury, rediscoverWallets, subscribeWallets,
   type BrowserProvider, type BrowserWallet,
 } from "@/lib/browser-wallets";
 export default function NetworkActions({
@@ -32,16 +32,19 @@ export default function NetworkActions({
       quotedAt: string;
     } | null>(null),
     [pending, setPending] = useState(""),
+    [uncertain, setUncertain] = useState(false),
     [manual, setManual] = useState("");
   const wallets = useSyncExternalStore(subscribeWallets, getWallets, getServerWallets);
   const selectedProvider = useRef<BrowserProvider | null>(null);
   const key = "openproof-pending-" + record.id;
+  const uncertainKey = "openproof-uncertain-" + record.id;
   useEffect(() => {
     try {
       // eslint-disable-next-line react-hooks/set-state-in-effect -- Restore the browser-only recovery token after hydration.
       setPending(localStorage.getItem(key) || "");
+      setUncertain(localStorage.getItem(uncertainKey) === "1");
     } catch {}
-  }, [key]);
+  }, [key, uncertainKey]);
   const track = useCallback(
     async (txId?: string) => {
       setBusy(true);
@@ -58,8 +61,10 @@ export default function NetworkActions({
         if (d.record.txId) {
           try {
             localStorage.removeItem(key);
+            localStorage.removeItem(uncertainKey);
           } catch {}
           setPending("");
+          setUncertain(false);
         }
       } catch (e) {
         setError(
@@ -71,7 +76,7 @@ export default function NetworkActions({
         setBusy(false);
       }
     },
-    [record.id, key, onUpdate],
+    [record.id, key, uncertainKey, onUpdate],
   );
   useEffect(() => {
     if (
@@ -135,6 +140,7 @@ export default function NetworkActions({
   async function submit() {
     setBusy(true);
     setError("");
+    let walletWriteStarted = false;
     try {
       if (!quote || Date.now() - Date.parse(quote.quotedAt) > 120000)
         throw new Error(
@@ -165,6 +171,7 @@ export default function NetworkActions({
           Parameters<typeof createClient>[0]
         >["provider"],
       });
+      walletWriteStarted = true;
       const txId = await client.writeContract({
         address: contractFor(record),
         functionName: "evaluate",
@@ -182,6 +189,15 @@ export default function NetworkActions({
       setReview(false);
       await track(txId);
     } catch (e) {
+      if (walletWriteStarted && !isExplicitWalletRejection(e)) {
+        setUncertain(true);
+        try {
+          localStorage.setItem(uncertainKey, "1");
+        } catch {}
+        selectedProvider.current = null;
+        setQuote(null);
+        setReview(false);
+      }
       setError(explainWalletError(e));
     } finally {
       setBusy(false);
@@ -228,18 +244,35 @@ export default function NetworkActions({
         </>
       ) : (
         <>
-          <button
-            className="primary"
-            disabled={busy || !ready}
-            onClick={beginConnect}
-          >
-            {busy ? (
-              <LoaderCircle className="spin" size={15} />
-            ) : (
-              <Wallet size={15} />
-            )}
-            Review testnet submission
-          </button>
+          {uncertain ? (
+            <div className="notice">
+              <p>A wallet submission may have been sent. Check wallet activity before trying this case again. If you find a transaction ID, use “Already submitted?” below to attach it.</p>
+              <button
+                className="secondary"
+                disabled={busy}
+                onClick={() => {
+                  try { localStorage.removeItem(uncertainKey); } catch {}
+                  setUncertain(false);
+                  setError("");
+                }}
+              >
+                I checked wallet activity; no transaction found
+              </button>
+            </div>
+          ) : (
+            <button
+              className="primary"
+              disabled={busy || !ready}
+              onClick={beginConnect}
+            >
+              {busy ? (
+                <LoaderCircle className="spin" size={15} />
+              ) : (
+                <Wallet size={15} />
+              )}
+              Review testnet submission
+            </button>
+          )}
           <p className="network-disclaimer">
             {ready
               ? "A wallet is needed only to submit. Your wallet shows the final fee. If it displays a security warning, stop."
