@@ -27,6 +27,7 @@ import {
 export default function OpenProof() {
   const router = useRouter();
   const [claim, setClaim] = useState("");
+  const [mode, setMode] = useState<"promise" | "state">("promise");
   const [scope, setScope] = useState(false);
   const [type, setType] = useState<ClaimType>("control");
   const [method, setMethod] = useState(false);
@@ -78,6 +79,7 @@ export default function OpenProof() {
                   "Provide a 25–1200 character promise and a supported template.",
                 );
               setClaim(value.claim);
+              setMode("promise");
               setType(value.template as ClaimType);
               setScope(true);
               await new Promise<void>((resolve) =>
@@ -115,7 +117,7 @@ export default function OpenProof() {
         </nav>
         <span className="network-label">
           <span />
-          Read-only exploration
+          Explore free · Bradbury submission optional
         </span>
       </header>
       <main id="main">
@@ -126,41 +128,66 @@ export default function OpenProof() {
           </div>
           <h1>Follow the evidence.</h1>
           <p>
-            From what was promised to what happened on-chain.
+            Check a public promise or a historical contract fact.
             <br />
-            Ask a precise question. Inspect the sources. See what holds up.
+            Start with a precise question. Keep the evidence and its limits in view.
           </p>
         </section>
         <section className="start-grid" aria-label="Start an investigation">
           <div className="claim-panel">
             <div className="section-kicker">
-              <span>01 / START WITH A CLAIM</span>
+              <span>01 / CHOOSE YOUR QUESTION</span>
               <span>
                 No wallet needed <LockKeyhole size={13} />
               </span>
             </div>
-            <label htmlFor="claim">
-              <h2>What did the project promise?</h2>
-            </label>
-            <textarea
-              id="claim"
-              value={claim}
-              onChange={(e) => setClaim(e.target.value)}
-              maxLength={1200}
-              placeholder={
-                "“The team will renounce contract ownership\nby September 1, 2026.”"
-              }
-            />
+            <div className="entry-modes" role="group" aria-label="Choose how to start">
+              <button
+                type="button"
+                className={mode === "promise" ? "selected" : ""}
+                aria-pressed={mode === "promise"}
+                onClick={() => setMode("promise")}
+              >
+                Public promise
+              </button>
+              <button
+                type="button"
+                className={mode === "state" ? "selected" : ""}
+                aria-pressed={mode === "state"}
+                onClick={() => setMode("state")}
+              >
+                Contract state
+              </button>
+            </div>
+            {mode === "promise" ? (
+              <>
+                <label htmlFor="claim">
+                  <h2>What did the project promise?</h2>
+                </label>
+                <textarea
+                  id="claim"
+                  value={claim}
+                  onChange={(e) => setClaim(e.target.value)}
+                  maxLength={1200}
+                  placeholder="Example: The team said it would change the contract owner by a stated date."
+                />
+              </>
+            ) : (
+              <div className="state-entry">
+                <h2>Check one contract fact at a past moment.</h2>
+                <p>Compare an owner, unlock time, or implementation address with the value you expected. No public statement is needed.</p>
+              </div>
+            )}
             <div className="composer-footer">
-              <button className="text-button" onClick={() => setScope(true)}>
-                <Plus size={17} /> Add a source or contract
+              <button className="text-button" onClick={() => setMethod(true)}>
+                <Plus size={17} /> What will I need?
               </button>
               <button className="primary" onClick={() => setScope(true)}>
-                Build a case <ArrowRight size={17} />
+                Continue to details <ArrowRight size={17} />
               </button>
             </div>
             <div className="composer-note">
-              <ShieldCheck size={15} /> Check a public promise or an exact historical value.
+              <ShieldCheck size={15} /> {mode === "promise" ? "Bring a dated public source and the contract you want to check." : "You can build and save this comparison before connecting a wallet."}
             </div>
           </div>
           <aside className="scope-card">
@@ -168,12 +195,11 @@ export default function OpenProof() {
               <FileCheck2 size={35} strokeWidth={1.2} />
             </div>
             <h3>
-              A claim. A cutoff.
+              One question.
               <br />A clear record.
             </h3>
             <p>
-              OpenProof connects public statements with observable contract
-              activity.
+              OpenProof shows the source, historical value, and exact limit of each answer.
             </p>
             <div className="scope-divider" />
             <div className="scope-row">
@@ -191,27 +217,27 @@ export default function OpenProof() {
         </section>
         <section className="templates">
           <div className="section-heading">
-            <h2>Three questions worth asking.</h2>
-            <span>CHOOSE A STARTING POINT</span>
+            <h2>Choose the contract fact.</h2>
+            <span>THREE SUPPORTED CHECKS</span>
           </div>
           <div className="template-grid">
             {[
               {
                 Icon: LockKeyhole,
                 name: "Treasury restrictions",
-                text: "Were the promised treasury restrictions in place?",
+                text: "Compare the stored unlock time with your expected date.",
                 n: "01",
               },
               {
                 Icon: ShieldCheck,
                 name: "Admin & owner control",
-                text: "Did control change in the way the project said?",
+                text: "Compare owner() with an expected address at a cutoff.",
                 n: "02",
               },
               {
                 Icon: GitBranch,
                 name: "Contract changes",
-                text: "Did the announced contract change take effect?",
+                text: "Compare an EIP-1967 implementation address.",
                 n: "03",
               },
             ].map(({ Icon, name, text, n }) => (
@@ -242,11 +268,23 @@ export default function OpenProof() {
             ))}
           </div>
         </section>
-        <section className="examples" id="examples">
+        <section className="live-proof" id="examples" aria-label="Cases assessed on Bradbury">
+          <div className="live-proof-heading">
+            <span className="eyebrow">REAL TESTNET RECORDS</span>
+            <h2>See what an assessed case looks like.</h2>
+            <p>These Bradbury records show a match, a mismatch, and a source that did not establish the question. Open each one to inspect the evidence, transaction, and limits.</p>
+          </div>
+          <div className="live-links">
+            <Link href="/case/2735f336-d5cf-417c-a267-8f0918455293"><span>01 / SUPPORTED</span><strong>Matching owner</strong><small>The historical value matched.</small><ArrowUpRight size={18}/></Link>
+            <Link href="/case/d7ca8a0d-92cd-4d16-b68d-9ba999205c4d"><span>02 / CONTRADICTED</span><strong>Different owner</strong><small>The historical value differed.</small><ArrowUpRight size={18}/></Link>
+            <Link href="/case/72f7f19d-e0b1-488f-9ace-a06567b0c37b"><span>03 / INSUFFICIENT</span><strong>Unrelated X source</strong><small>The source did not establish it.</small><ArrowUpRight size={18}/></Link>
+          </div>
+        </section>
+        <section className="examples" id="sample-cases">
           <div className="section-heading">
             <div>
-              <h2>Open a case. See the whole picture.</h2>
-              <p>Illustrative cases, built to show the process.</p>
+              <h2>Practice with sample records.</h2>
+              <p>These fictional examples show how a case page is organised.</p>
             </div>
             <span className="sample-label">SAMPLE DATA</span>
           </div>
@@ -293,10 +331,6 @@ export default function OpenProof() {
             </button>
           </div>
         </section>
-        <section className="live-proof" aria-label="Cases assessed on Bradbury">
-          <div><span className="eyebrow">ASSESSED CASES</span><h2>Three outcomes. Inspect the evidence.</h2><p>See how a matching value, a different value, and an unrelated X post led to different outcomes on Bradbury. Each finding is limited to its stated question; none is an allegation about a project.</p></div>
-          <div className="live-links"><Link className="secondary" href="/case/2735f336-d5cf-417c-a267-8f0918455293">Matching owner <ArrowUpRight size={16}/></Link><Link className="secondary" href="/case/d7ca8a0d-92cd-4d16-b68d-9ba999205c4d">Different owner <ArrowUpRight size={16}/></Link><Link className="secondary" href="/case/72f7f19d-e0b1-488f-9ace-a06567b0c37b">Unrelated X source <ArrowUpRight size={16}/></Link></div>
-        </section>
         <ProjectGuide onStart={() => setScope(true)} />
         <footer>
           <span className="footer-brand">
@@ -310,11 +344,12 @@ export default function OpenProof() {
         </footer>
       </main>
       <CaseBuilder
-        key={String(scope) + type}
+        key={String(scope) + type + mode}
         open={scope}
         onOpenChange={setScope}
-        initialClaim={claim}
+        initialClaim={mode === "promise" ? claim : ""}
         initialType={type}
+        initialVerification={mode}
       />
       <Dialog open={method} onOpenChange={setMethod}>
         <DialogContent>

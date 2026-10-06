@@ -62,6 +62,7 @@ export default function CaseWorkspace({ id }: { id: string }) {
   }
   return (
     <>
+      <a href="#main" className="skip-link">Skip to case</a>
       <header className="topbar">
         <Link className="brand" href="/">
           <span className="brand-icon">
@@ -73,7 +74,7 @@ export default function CaseWorkspace({ id }: { id: string }) {
           <ArrowLeft size={16} />
           Back to workspace
         </Link>
-        <span className="network-label">Read-only case record</span>
+        <span className="network-label">Evidence record</span>
       </header>
       <main className="case-main" id="main">
         {error ? (
@@ -118,6 +119,15 @@ export default function CaseWorkspace({ id }: { id: string }) {
                         : "The announced upgrade."
                     : "An open evidence record."}
                 </h1>
+                <p className="case-title-subtitle">
+                  {record.sample
+                    ? "Illustrative data only. No GenLayer transaction took place."
+                    : record.outcome
+                      ? "GenLayer assessed this exact question. Inspect the evidence and execution below."
+                      : record.txId
+                        ? "Submitted to Bradbury. Follow the transaction before drawing a conclusion."
+                        : "Saved draft. Review the evidence before choosing whether to submit."}
+                </p>
               </div>
               <div className="case-tools">
                 {!record.sample ? <button className="secondary" onClick={() => setCorrecting(true)}>Create revised case</button> : null}

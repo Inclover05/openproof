@@ -130,4 +130,4 @@ body {
 .guide-faq summary {font-weight:600;cursor:pointer;font-size:15px;}
 .guide-faq p {max-width:850px;margin-top:12px;}
 @media(max-width:760px){.guide-grid{grid-template-columns:1fr}.guide-story,.guide-simulator{padding:23px}.project-guide{margin-top:40px}}
-.live-links{display:flex;flex-direction:column;gap:10px;flex-shrink:0}.case-tools{flex-wrap:wrap}
+.case-tools{flex-wrap:wrap}

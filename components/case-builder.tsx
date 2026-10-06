@@ -38,12 +38,14 @@ export default function CaseBuilder({
   onOpenChange,
   initialClaim,
   initialType,
+  initialVerification,
   initialInput,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   initialClaim: string;
   initialType: ClaimType;
+  initialVerification?: "promise" | "state";
   initialInput?: CaseInput;
 }) {
   const router = useRouter();
@@ -60,7 +62,7 @@ export default function CaseBuilder({
         : "0x0000000000000000000000000000000000000000"),
     );
   const [snapshotId, setSnapshotId] = useState("");
-  const [verification, setVerification] = useState<"promise" | "state">(initialInput?.verification || "promise");
+  const [verification, setVerification] = useState<"promise" | "state">(initialInput?.verification || initialVerification || "promise");
   const [corroboratingSource, setCorroboratingSource] = useState(initialInput?.corroboratingSource || "");
   const [sourceCheck, setSourceCheck] = useState<Evidence | null>(null);
   const [checkingSource, setCheckingSource] = useState(false);
@@ -193,6 +195,11 @@ export default function CaseBuilder({
             </li>
           ))}
         </ol>
+        {error ? (
+          <p role="alert" className="form-error builder-error">
+            {error}
+          </p>
+        ) : null}
         <div className="builder-body">
           {step === 0 ? (
             <form
@@ -250,7 +257,7 @@ export default function CaseBuilder({
                 </div>
               </div>
               <div className="field">
-                <label htmlFor="promise">{verification === "state" ? "Statement to check" : "Public promise"}</label>
+                <label htmlFor="promise">{verification === "state" ? "Describe your comparison" : "Public promise"}</label>
                 <textarea
                   id="promise"
                   value={claim}
@@ -258,8 +265,18 @@ export default function CaseBuilder({
                   required
                   minLength={25}
                   maxLength={1200}
-                  placeholder="The team will renounce owner() control before September 1, 2026."
+                  placeholder={verification === "state" ? "Historical comparison: check whether owner() matched the expected address at the chosen cutoff." : "The team will change owner() control before a stated date."}
                 />
+                {verification === "state" ? (
+                  <div className="field-assist">
+                    <small>This describes the value you want to check; it does not claim anyone made a promise.</small>
+                    <button type="button" className="text-button" onClick={() => setClaim({
+                      control: "Historical comparison: check whether owner() matched the expected address at the chosen UTC cutoff.",
+                      treasury: "Historical comparison: check whether unlockTime() met the expected minimum at the chosen UTC cutoff.",
+                      upgrade: "Historical comparison: check whether the EIP-1967 implementation matched the expected address at the chosen UTC cutoff.",
+                    }[type])}>Use neutral wording <ArrowRight size={14} /></button>
+                  </div>
+                ) : null}
               </div>
               <div className="field">
                 <label htmlFor="source-url">
@@ -309,6 +326,7 @@ export default function CaseBuilder({
                     value={date}
                     onChange={(e) => setDate(e.target.value)}
                   />
+                  <small>Enter UTC time. For example, 09:00 in Nigeria is 08:00 UTC.</small>
                 </div>
                 <div className="field">
                   <label htmlFor="field">{templates[type].field}</label>
@@ -442,11 +460,6 @@ export default function CaseBuilder({
               </p>
             </>
           )}
-          {error ? (
-            <p role="alert" className="form-error">
-              {error}
-            </p>
-          ) : null}
         </div>
         <div className="builder-actions">
           <button
